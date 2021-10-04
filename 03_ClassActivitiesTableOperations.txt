@@ -1,0 +1,548 @@
+SQL> spool
+currently spooling to c:\users\austin\desktop\classAssign1.txt
+SQL> connect austin
+Connected.
+SQL> create table movies(
+  2  movie_num integer primary key,
+  3  movie_name varchar2(25) unique,
+  4  movie_year integer not null,
+  5  movie_cost number(4,2),
+  6  movie_genre varchar2(10));
+
+Table created.
+
+SQL> create table staff(
+  2  staff_no integer primary key,
+  3  staff_name varchar2(20),
+  4  role varchar(15),
+  5  movie_num references movies on delete cascade);
+
+Table created.
+
+SQL> alter table movies
+  2  modify ( movie_name varchar2(40));
+
+Table altered.
+
+SQL> insert into movies values ('&movie_num','&movie_name', '&movie_year', '&movie_cost', '&movie_genre');
+Enter value for movie_num: 1234
+Enter value for movie_name: The Cesar Family Christmas
+Enter value for movie_year: 2007
+Enter value for movie_cost: 39.95
+Enter value for movie_genre: FAMILY
+old   1: insert into movies values ('&movie_num','&movie_name', '&movie_year', '&movie_cost', '&movie_genre')
+new   1: insert into movies values ('1234','The Cesar Family Christmas', '2007', '39.95', 'FAMILY')
+
+1 row created.
+
+SQL> /
+Enter value for movie_num: 1235
+Enter value for movie_name: Smokey Mountain Wildlife
+Enter value for movie_year: 2004
+Enter value for movie_cost: 59.95
+Enter value for movie_genre: ACTION
+old   1: insert into movies values ('&movie_num','&movie_name', '&movie_year', '&movie_cost', '&movie_genre')
+new   1: insert into movies values ('1235','Smokey Mountain Wildlife', '2004', '59.95', 'ACTION')
+
+1 row created.
+
+SQL> /
+Enter value for movie_num: 1236
+Enter value for movie_name: Richard Goodhope
+Enter value for movie_year: 2008
+Enter value for movie_cost: 59.95
+Enter value for movie_genre: DRAMA
+old   1: insert into movies values ('&movie_num','&movie_name', '&movie_year', '&movie_cost', '&movie_genre')
+new   1: insert into movies values ('1236','Richard Goodhope', '2008', '59.95', 'DRAMA')
+
+1 row created.
+
+SQL> /
+Enter value for movie_num: 1237
+Enter value for movie_name: Beatnick Fever
+Enter value for movie_year: 2007
+Enter value for movie_cost: 29.95
+Enter value for movie_genre: COMEDY
+old   1: insert into movies values ('&movie_num','&movie_name', '&movie_year', '&movie_cost', '&movie_genre')
+new   1: insert into movies values ('1237','Beatnick Fever', '2007', '29.95', 'COMEDY')
+
+1 row created.
+
+SQL> /
+Enter value for movie_num: 1238
+Enter value for movie_name: Constant Companion
+Enter value for movie_year: 2008
+Enter value for movie_cost: 89.95
+Enter value for movie_genre: DRAMA
+old   1: insert into movies values ('&movie_num','&movie_name', '&movie_year', '&movie_cost', '&movie_genre')
+new   1: insert into movies values ('1238','Constant Companion', '2008', '89.95', 'DRAMA')
+
+1 row created.
+
+SQL> /
+Enter value for movie_num: 1239
+Enter value for movie_name: Where Hope Dies
+Enter value for movie_year: 1998
+Enter value for movie_cost: 25.49
+Enter value for movie_genre: DRAMA
+old   1: insert into movies values ('&movie_num','&movie_name', '&movie_year', '&movie_cost', '&movie_genre')
+new   1: insert into movies values ('1239','Where Hope Dies', '1998', '25.49', 'DRAMA')
+
+1 row created.
+
+SQL> /
+Enter value for movie_num: 1240
+Enter value for movie_name: Time To Burn
+Enter value for movie_year: 2005
+Enter value for movie_cost: 45.49
+Enter value for movie_genre: ACTION
+old   1: insert into movies values ('&movie_num','&movie_name', '&movie_year', '&movie_cost', '&movie_genre')
+new   1: insert into movies values ('1240','Time To Burn', '2005', '45.49', 'ACTION')
+
+1 row created.
+
+SQL> /
+Enter value for movie_num: 1241
+Enter value for movie_name: What He Does not Know
+Enter value for movie_year: 2006
+Enter value for movie_cost: 58.29
+Enter value for movie_genre: COMEDY
+old   1: insert into movies values ('&movie_num','&movie_name', '&movie_year', '&movie_cost', '&movie_genre')
+new   1: insert into movies values ('1241','What He Does not Know', '2006', '58.29', 'COMEDY')
+
+1 row created.
+
+SQL> SELECT * from movies;
+
+ MOVIE_NUM MOVIE_NAME                               MOVIE_YEAR MOVIE_COST       
+---------- ---------------------------------------- ---------- ----------       
+MOVIE_GENR                                                                      
+----------                                                                      
+      1234 The Cesar Family Christmas                     2007      39.95       
+FAMILY                                                                          
+                                                                                
+      1235 Smokey Mountain Wildlife                       2004      59.95       
+ACTION                                                                          
+                                                                                
+      1236 Richard Goodhope                               2008      59.95       
+DRAMA                                                                           
+                                                                                
+
+ MOVIE_NUM MOVIE_NAME                               MOVIE_YEAR MOVIE_COST       
+---------- ---------------------------------------- ---------- ----------       
+MOVIE_GENR                                                                      
+----------                                                                      
+      1237 Beatnick Fever                                 2007      29.95       
+COMEDY                                                                          
+                                                                                
+      1238 Constant Companion                             2008      89.95       
+DRAMA                                                                           
+                                                                                
+      1239 Where Hope Dies                                1998      25.49       
+DRAMA                                                                           
+                                                                                
+
+ MOVIE_NUM MOVIE_NAME                               MOVIE_YEAR MOVIE_COST       
+---------- ---------------------------------------- ---------- ----------       
+MOVIE_GENR                                                                      
+----------                                                                      
+      1240 Time To Burn                                   2005      45.49       
+ACTION                                                                          
+                                                                                
+      1241 What He Does not Know                          2006      58.29       
+COMEDY                                                                          
+                                                                                
+
+8 rows selected.
+
+SQL> set linesize 300;
+SQL> SELECT * from movies;
+
+ MOVIE_NUM MOVIE_NAME                               MOVIE_YEAR MOVIE_COST MOVIE_GENR                                                                                                                                                                                                                        
+---------- ---------------------------------------- ---------- ---------- ----------                                                                                                                                                                                                                        
+      1234 The Cesar Family Christmas                     2007      39.95 FAMILY                                                                                                                                                                                                                            
+      1235 Smokey Mountain Wildlife                       2004      59.95 ACTION                                                                                                                                                                                                                            
+      1236 Richard Goodhope                               2008      59.95 DRAMA                                                                                                                                                                                                                             
+      1237 Beatnick Fever                                 2007      29.95 COMEDY                                                                                                                                                                                                                            
+      1238 Constant Companion                             2008      89.95 DRAMA                                                                                                                                                                                                                             
+      1239 Where Hope Dies                                1998      25.49 DRAMA                                                                                                                                                                                                                             
+      1240 Time To Burn                                   2005      45.49 ACTION                                                                                                                                                                                                                            
+      1241 What He Does not Know                          2006      58.29 COMEDY                                                                                                                                                                                                                            
+
+8 rows selected.
+
+SQL> set linesize 400;
+SQL> create sequence staffnum_seq
+  2  start with 211
+  3  increment by 13
+  4  order;
+
+Sequence created.
+
+SQL> insert into staff values(staffnum_seq.nextval, 'Eheriah', 'Director', 1239)
+  2  ;
+
+1 row created.
+
+SQL> insert into staff values(staffnum_seq.nextval, 'Parikh', 'Support', 1235);
+
+1 row created.
+
+SQL> insert into staff values(staffnum_seq.nextval, 'Garcia', '' ,1234 );
+
+1 row created.
+
+SQL> insert into staff values(staffnum_seq.nextval, 'Eisenhauer','Actor' ,1237 );
+
+1 row created.
+
+SQL> insert into staff values(staffnum_seq.nextval, 'Bayer','Support' ,1239 );
+
+1 row created.
+
+SQL> insert into staff values(staffnum_seq.nextval, 'Molly','Director' ,1246 );
+insert into staff values(staffnum_seq.nextval, 'Molly','Director' ,1246 )
+*
+ERROR at line 1:
+ORA-02291: integrity constraint (AUSTIN.SYS_C007007) violated - parent key not found 
+
+
+SQL> insert into staff values(staffnum_seq.nextval, 'Molly','Director' ,1236 );
+
+1 row created.
+
+SQL> select * from staff;
+
+  STAFF_NO STAFF_NAME           ROLE             MOVIE_NUM                                                                                                                                                                                                                                                                                                                                                      
+---------- -------------------- --------------- ----------                                                                                                                                                                                                                                                                                                                                                      
+       211 Eheriah              Director              1239                                                                                                                                                                                                                                                                                                                                                      
+       224 Parikh               Support               1235                                                                                                                                                                                                                                                                                                                                                      
+       237 Garcia                                     1234                                                                                                                                                                                                                                                                                                                                                      
+       250 Eisenhauer           Actor                 1237                                                                                                                                                                                                                                                                                                                                                      
+       263 Bayer                Support               1239                                                                                                                                                                                                                                                                                                                                                      
+       289 Molly                Director              1236                                                                                                                                                                                                                                                                                                                                                      
+
+6 rows selected.
+
+SQL> --Question one
+SQL> select * from movies order by movie_cost desc;
+
+ MOVIE_NUM MOVIE_NAME                               MOVIE_YEAR MOVIE_COST MOVIE_GENR                                                                                                                                                                                                                                                                                                                            
+---------- ---------------------------------------- ---------- ---------- ----------                                                                                                                                                                                                                                                                                                                            
+      1238 Constant Companion                             2008      89.95 DRAMA                                                                                                                                                                                                                                                                                                                                 
+      1235 Smokey Mountain Wildlife                       2004      59.95 ACTION                                                                                                                                                                                                                                                                                                                                
+      1236 Richard Goodhope                               2008      59.95 DRAMA                                                                                                                                                                                                                                                                                                                                 
+      1241 What He Does not Know                          2006      58.29 COMEDY                                                                                                                                                                                                                                                                                                                                
+      1240 Time To Burn                                   2005      45.49 ACTION                                                                                                                                                                                                                                                                                                                                
+      1234 The Cesar Family Christmas                     2007      39.95 FAMILY                                                                                                                                                                                                                                                                                                                                
+      1237 Beatnick Fever                                 2007      29.95 COMEDY                                                                                                                                                                                                                                                                                                                                
+      1239 Where Hope Dies                                1998      25.49 DRAMA                                                                                                                                                                                                                                                                                                                                 
+
+8 rows selected.
+
+SQL> --Question two Cost btwn 45 and 60
+SQL> select * from movies where movie_cost between 45 and 60;
+
+ MOVIE_NUM MOVIE_NAME                               MOVIE_YEAR MOVIE_COST MOVIE_GENR                                                                                                                                                                                                                                                                                                                            
+---------- ---------------------------------------- ---------- ---------- ----------                                                                                                                                                                                                                                                                                                                            
+      1235 Smokey Mountain Wildlife                       2004      59.95 ACTION                                                                                                                                                                                                                                                                                                                                
+      1236 Richard Goodhope                               2008      59.95 DRAMA                                                                                                                                                                                                                                                                                                                                 
+      1240 Time To Burn                                   2005      45.49 ACTION                                                                                                                                                                                                                                                                                                                                
+      1241 What He Does not Know                          2006      58.29 COMEDY                                                                                                                                                                                                                                                                                                                                
+
+SQL> --Question 3 average movie cost
+SQL> select avg (movie_cost) as Average_Cost from movies;
+
+AVERAGE_COST                                                                                                                                                                                                                                                                                                                                                                                                    
+------------                                                                                                                                                                                                                                                                                                                                                                                                    
+     51.1275                                                                                                                                                                                                                                                                                                                                                                                                    
+
+SQL> --question 4 list staff with names begining e and ending with r
+
+SQL> select staff_no, staff_name from staff where staff_name like 'E%' and staff_name like '%r';
+
+  STAFF_NO STAFF_NAME                                                                                                                                                                                                                                                                                                                                                                                           
+---------- --------------------                                                                                                                                                                                                                                                                                                                                                                                 
+       250 Eisenhauer  
+                                                                                                                                                                                                                                                                                                                                                                                         
+SQL> --question 5
+SQL> alter table staff
+  2  add (remuneration number(8,2));
+
+Table altered.
+
+SQL> select * from staff;
+
+  STAFF_NO STAFF_NAME           ROLE             MOVIE_NUM REMUNERATION                                                                                                                                                                                                                                                                                                                                         
+---------- -------------------- --------------- ---------- ------------                                                                                                                                                                                                                                                                                                                                         
+       211 Eheriah              Director              1239                                                                                                                                                                                                                                                                                                                                                      
+       224 Parikh               Support               1235                                                                                                                                                                                                                                                                                                                                                      
+       237 Garcia                                     1234                                                                                                                                                                                                                                                                                                                                                      
+       250 Eisenhauer           Actor                 1237                                                                                                                                                                                                                                                                                                                                                      
+       263 Bayer                Support               1239                                                                                                                                                                                                                                                                                                                                                      
+       289 Molly                Director              1236                                                                                                                                                                                                                                                                                                                                                      
+
+6 rows selected.
+
+SQL> --question 7
+SQL> update staff
+  2  set remuneration=15.75
+  3  where role='Director';
+
+2 rows updated.
+
+SQL> select * from staff;
+
+  STAFF_NO STAFF_NAME           ROLE             MOVIE_NUM REMUNERATION                                                                                                                                                                                                                                                                                                                                         
+---------- -------------------- --------------- ---------- ------------                                                                                                                                                                                                                                                                                                                                         
+       211 Eheriah              Director              1239        15.75                                                                                                                                                                                                                                                                                                                                         
+       224 Parikh               Support               1235                                                                                                                                                                                                                                                                                                                                                      
+       237 Garcia                                     1234                                                                                                                                                                                                                                                                                                                                                      
+       250 Eisenhauer           Actor                 1237                                                                                                                                                                                                                                                                                                                                                      
+       263 Bayer                Support               1239                                                                                                                                                                                                                                                                                                                                                      
+       289 Molly                Director              1236        15.75                                                                                                                                                                                                                                                                                                                                         
+
+6 rows selected.
+
+SQL> -- Question 6 roles in the org
+SQL> select distinct role from staff;
+
+ROLE                                                                                                                                                                                                                                                                                                                                                                                                            
+---------------                                                                                                                                                                                                                                                                                                                                                                                                 
+Support                                                                                                                                                                                                                                                                                                                                                                                                         
+                                                                                                                                                                                                                                                                                                                                                                                                                
+Actor                                                                                                                                                                                                                                                                                                                                                                                                           
+Director                                                                                                                                                                                                                                                                                                                                                                                                        
+
+SQL> --question 8
+SQL> --unknown roles
+SQL> select * from staff where role is null;
+
+  STAFF_NO STAFF_NAME           ROLE             MOVIE_NUM REMUNERATION                                                                                                                                                                                                                                                                                                                                         
+---------- -------------------- --------------- ---------- ------------                                                                                                                                                                                                                                                                                                                                         
+       237 Garcia                                     1234                                                                                                                                                                                                                                                                                                                                                      
+
+SQL> --question 9
+SQL> select staff_no, movie_num from staff where role='Actor';
+
+  STAFF_NO  MOVIE_NUM                                                                                                                                                                                                                                                                                                                                                                                           
+---------- ----------                                                                                                                                                                                                                                                                                                                                                                                           
+       250       1237                                                                                                                                                                                                                                                                                                                                                                                           
+
+SQL> --Question 10
+SQL> update movies
+  2  set movie_year=2008 , movie_cost='50'
+  3  where movie_num=1235;
+
+1 row updated.
+
+SQL> select * from movies;
+
+ MOVIE_NUM MOVIE_NAME                               MOVIE_YEAR MOVIE_COST MOVIE_GENR                                                                                                                                                                                                                                                                                                                            
+---------- ---------------------------------------- ---------- ---------- ----------                                                                                                                                                                                                                                                                                                                            
+      1234 The Cesar Family Christmas                     2007      39.95 FAMILY                                                                                                                                                                                                                                                                                                                                
+      1235 Smokey Mountain Wildlife                       2008         50 ACTION                                                                                                                                                                                                                                                                                                                                
+      1236 Richard Goodhope                               2008      59.95 DRAMA                                                                                                                                                                                                                                                                                                                                 
+      1237 Beatnick Fever                                 2007      29.95 COMEDY                                                                                                                                                                                                                                                                                                                                
+      1238 Constant Companion                             2008      89.95 DRAMA                                                                                                                                                                                                                                                                                                                                 
+      1239 Where Hope Dies                                1998      25.49 DRAMA                                                                                                                                                                                                                                                                                                                                 
+      1240 Time To Burn                                   2005      45.49 ACTION                                                                                                                                                                                                                                                                                                                                
+      1241 What He Does not Know                          2006      58.29 COMEDY                                                                                                                                                                                                                                                                                                                                
+
+8 rows selected.
+
+SQL> --Question 11
+SQL> select * from staff where staff_name like '__r%';
+
+  STAFF_NO STAFF_NAME           ROLE             MOVIE_NUM REMUNERATION                                                                                                                                                                                                                                                                                                                                         
+---------- -------------------- --------------- ---------- ------------                                                                                                                                                                                                                                                                                                                                         
+       224 Parikh               Support               1235                                                                                                                                                                                                                                                                                                                                                      
+       237 Garcia                                     1234                                                                                                                                                                                                                                                                                                                                                      
+
+SQL> --Question 12
+SQL> alter table staff
+  2  rename to Workers;
+
+Table altered.
+
+SQL> select * from workers;
+
+  STAFF_NO STAFF_NAME           ROLE             MOVIE_NUM REMUNERATION                                                                                                                                                                                                                                                                                                                                         
+---------- -------------------- --------------- ---------- ------------                                                                                                                                                                                                                                                                                                                                         
+       211 Eheriah              Director              1239        15.75                                                                                                                                                                                                                                                                                                                                         
+       224 Parikh               Support               1235                                                                                                                                                                                                                                                                                                                                                      
+       237 Garcia                                     1234                                                                                                                                                                                                                                                                                                                                                      
+       250 Eisenhauer           Actor                 1237                                                                                                                                                                                                                                                                                                                                                      
+       263 Bayer                Support               1239                                                                                                                                                                                                                                                                                                                                                      
+       289 Molly                Director              1236        15.75                                                                                                                                                                                                                                                                                                                                         
+
+6 rows selected.
+
+SQL> --Question 13
+SQL> create table IMAX_MOVIES as select movie_num, movie_cost, movie_genre from movies;
+
+Table created.
+
+SQL> select * from imax_movies;
+
+ MOVIE_NUM MOVIE_COST MOVIE_GENR                                                                                                                                                                                                                                                                                                                                                                                
+---------- ---------- ----------                                                                                                                                                                                                                                                                                                                                                                                
+      1234      39.95 FAMILY                                                                                                                                                                                                                                                                                                                                                                                    
+      1235         50 ACTION                                                                                                                                                                                                                                                                                                                                                                                    
+      1236      59.95 DRAMA                                                                                                                                                                                                                                                                                                                                                                                     
+      1237      29.95 COMEDY                                                                                                                                                                                                                                                                                                                                                                                    
+      1238      89.95 DRAMA                                                                                                                                                                                                                                                                                                                                                                                     
+      1239      25.49 DRAMA                                                                                                                                                                                                                                                                                                                                                                                     
+      1240      45.49 ACTION                                                                                                                                                                                                                                                                                                                                                                                    
+      1241      58.29 COMEDY                                                                                                                                                                                                                                                                                                                                                                                    
+
+8 rows selected.
+
+SQL> --Question 14
+SQL> select movie_num, movie_name from movies where movie_name like '%hope%';
+
+ MOVIE_NUM MOVIE_NAME                                                                                                                                                                                                                                                                                                                                                                                           
+---------- ----------------------------------------                                                                                                                                                                                                                                                                                                                                                             
+      1236 Richard Goodhope                                                                                                                                                                                                                                                                                                                                                                                     
+
+SQL> select movie_num, movie_name from movies where movie_name like '%hope%' or movie_name like '%Hope%';
+
+ MOVIE_NUM MOVIE_NAME                                                                                                                                                                                                                                                                                                                                                                                           
+---------- ----------------------------------------                                                                                                                                                                                                                                                                                                                                                             
+      1236 Richard Goodhope                                                                                                                                                                                                                                                                                                                                                                                     
+      1239 Where Hope Dies                                                                                                                                                                                                                                                                                                                                                                                      
+
+SQL> -- Question 15
+SQL> select movie_genre,
+  2  avg(movie_cost)
+  3  from movies
+  4  group by movie_genre;
+
+MOVIE_GENR AVG(MOVIE_COST)                                                                                                                                                                                                                                                                                                                                                                                      
+---------- ---------------                                                                                                                                                                                                                                                                                                                                                                                      
+FAMILY               39.95                                                                                                                                                                                                                                                                                                                                                                                      
+ACTION              47.745                                                                                                                                                                                                                                                                                                                                                                                      
+COMEDY               44.12                                                                                                                                                                                                                                                                                                                                                                                      
+DRAMA           58.4633333                                                                                                                                                                                                                                                                                                                                                                                      
+
+SQL> --question 16
+SQL> delete from movies where movie_year=2008;
+
+3 rows deleted.
+
+SQL> select * from movies;
+
+ MOVIE_NUM MOVIE_NAME                               MOVIE_YEAR MOVIE_COST MOVIE_GENR                                                                                                                                                                                                                                                                                                                            
+---------- ---------------------------------------- ---------- ---------- ----------                                                                                                                                                                                                                                                                                                                            
+      1234 The Cesar Family Christmas                     2007      39.95 FAMILY                                                                                                                                                                                                                                                                                                                                
+      1237 Beatnick Fever                                 2007      29.95 COMEDY                                                                                                                                                                                                                                                                                                                                
+      1239 Where Hope Dies                                1998      25.49 DRAMA                                                                                                                                                                                                                                                                                                                                 
+      1240 Time To Burn                                   2005      45.49 ACTION                                                                                                                                                                                                                                                                                                                                
+      1241 What He Does not Know                          2006      58.29 COMEDY                                                                                                                                                                                                                                                                                                                                
+
+SQL> -- Question 17
+SQL> -- add check contraint to imax table
+SQL> --Question 18
+SQL> --remove table imax
+SQL> drop table imax_movies;
+
+Table dropped.
+
+SQL> select * from imax_movies;
+select * from imax_movies
+              *
+ERROR at line 1:
+ORA-00942: table or view does not exist 
+
+SQL> --Question 19
+SQL> --staff who are not directors
+SQL> select * from workers where not (role='Director') ;
+
+  STAFF_NO STAFF_NAME           ROLE             MOVIE_NUM REMUNERATION                                                                                                                                                                                                                                                                                                                                         
+---------- -------------------- --------------- ---------- ------------                                                                                                                                                                                                                                                                                                                                         
+       250 Eisenhauer           Actor                 1237                                                                                                                                                                                                                                                                                                                                                      
+       263 Bayer                Support               1239                                                                                                                                                                                                                                                                                                                                                      
+
+SQL> --Question 20
+SQL> --Question 21
+SQL> alter table movies
+  2  rename column movie_cost to Investment;
+
+Table altered.
+
+SQL> select * from movies;
+
+ MOVIE_NUM MOVIE_NAME                               MOVIE_YEAR INVESTMENT MOVIE_GENR                                                                                                                                                                                                                                                                                                                            
+---------- ---------------------------------------- ---------- ---------- ----------                                                                                                                                                                                                                                                                                                                            
+      1234 The Cesar Family Christmas                     2007      39.95 FAMILY                                                                                                                                                                                                                                                                                                                                
+      1237 Beatnick Fever                                 2007      29.95 COMEDY                                                                                                                                                                                                                                                                                                                                
+      1239 Where Hope Dies                                1998      25.49 DRAMA                                                                                                                                                                                                                                                                                                                                 
+      1240 Time To Burn                                   2005      45.49 ACTION                                                                                                                                                                                                                                                                                                                                
+      1241 What He Does not Know                          2006      58.29 COMEDY                                                                                                                                                                                                                                                                                                                                
+
+SQL> --Question 22
+SQL> drop sequence staffnum_seq;
+
+Sequence dropped.
+
+SQL> --	Question 23
+SQL> -- remove column remunerations
+SQL> alter table workers
+  2  drop column remuneration;
+
+Table altered.
+
+SQL> select * from workers;
+
+  STAFF_NO STAFF_NAME           ROLE             MOVIE_NUM                                                                                                                                                                                                                                                                                                                                                      
+---------- -------------------- --------------- ----------                                                                                                                                                                                                                                                                                                                                                      
+       211 Eheriah              Director              1239                                                                                                                                                                                                                                                                                                                                                      
+       237 Garcia                                     1234                                                                                                                                                                                                                                                                                                                                                      
+       250 Eisenhauer           Actor                 1237                                                                                                                                                                                                                                                                                                                                                      
+       263 Bayer                Support               1239                                                                                                                                                                                                                                                                                                                                                      
+
+SQL> -- question 25
+SQL> truncate table workers;
+
+Table truncated.
+
+SQL> select * from workers;
+
+no rows selected
+
+SQL> desc workers;
+ Name                                                                                                                                                                                                                                      Null?    Type
+ ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- -------- ------------------------------------------------------------------------------------------------------------------------------------------------------------
+ STAFF_NO                                                                                                                                                                                                                                  NOT NULL NUMBER(38)
+ STAFF_NAME                                                                                                                                                                                                                                         VARCHAR2(20)
+ ROLE                                                                                                                                                                                                                                               VARCHAR2(15)
+ MOVIE_NUM                                                                                                                                                                                                                                          NUMBER(38)
+
+SQL> -- Question 24
+SQL> select movie_genre,
+  2  avg(movie_cost) as Average
+  3  from movies
+  4  group by movie_genre
+  5  having investment > 50;
+avg(movie_cost) as Average
+    *
+ERROR at line 2:
+ORA-00904: "MOVIE_COST": invalid identifier 
+
+
+SQL> select movie_genre,
+  2  avg(investment) as Average
+  3  from movies
+  4  group by movie_genre
+  5  having investment > 50;
+having investment > 50
+       *
+ERROR at line 5:
+ORA-00979: not a GROUP BY expression 
+
+
+SQL> commit;
+
+Commit complete.
+
+SQL> exit;

@@ -1,0 +1,623 @@
+SQL> spool
+currently spooling to c:/users/austin/desktop/sequal1.txt
+SQL> connect system
+Connected.
+SQL> show user
+USER is "SYSTEM"
+SQL> --check priviledges
+SQL> select * from user_sys_privs;
+
+USERNAME                       PRIVILEGE                                ADM     
+------------------------------ ---------------------------------------- ---     
+SYSTEM                         GLOBAL QUERY REWRITE                     NO      
+SYSTEM                         CREATE MATERIALIZED VIEW                 NO      
+SYSTEM                         CREATE TABLE                             NO      
+SYSTEM                         UNLIMITED TABLESPACE                     YES     
+SYSTEM                         SELECT ANY TABLE                         NO      
+
+SQL> create user austin identified by abc password expire;
+
+User created.
+
+SQL> select * from user_sys_privs;
+
+USERNAME                       PRIVILEGE                                ADM     
+------------------------------ ---------------------------------------- ---     
+SYSTEM                         GLOBAL QUERY REWRITE                     NO      
+SYSTEM                         CREATE MATERIALIZED VIEW                 NO      
+SYSTEM                         CREATE TABLE                             NO      
+SYSTEM                         UNLIMITED TABLESPACE                     YES     
+SYSTEM                         SELECT ANY TABLE                         NO      
+
+SQL> --grant priviledges to austin
+SQL> grant connect, resource, create view, create procedure, create synonym, create sequence,create trigger to austin;
+
+Grant succeeded.
+
+SQL> connect austin
+ERROR:
+ORA-28001: the password has expired 
+
+
+Changing password for austin
+Password changed
+Connected.
+SQL> check user;
+SP2-0042: unknown command "check user" - rest of line ignored.
+SQL> check user
+SP2-0042: unknown command "check user" - rest of line ignored.
+SQL> show user;
+USER is "AUSTIN"
+SQL> select * from dual;
+
+D                                                                               
+-                                                                               
+X                                                                               
+
+SQL> select sysdate from dual;
+
+SYSDATE                                                                         
+---------                                                                       
+21-FEB-20                                                                       
+
+SQL> --Above checks the date using sysdate command
+SQL> -- arithmetic on dates
+SQL> select to_date('31-jan-2013')+2 from dual;
+
+TO_DATE('                                                                       
+---------                                                                       
+02-FEB-13                                                                       
+
+SQL> select to_date ('02-aug-2003')-to_date('31-july-2003') from dual;
+
+TO_DATE('02-AUG-2003')-TO_DATE('31-JULY-2003')                                  
+----------------------------------------------                                  
+                                             2                                  
+
+SQL> --Creating a table
+SQL> create table student(
+  2  studno int (10) primary key,
+  3  studname varchar2(20),
+  4  stud_dob date not null,
+  5  stud_major varchar2(8));
+studno int (10) primary key,
+           *
+ERROR at line 2:
+ORA-00907: missing right parenthesis 
+
+
+SQL> create table student(
+  2  studno int(10) primary key,
+  3  studname varchar2(20),
+  4  stud_dob date not null,
+  5  stud_major varchar2(8));
+studno int(10) primary key,
+          *
+ERROR at line 2:
+ORA-00907: missing right parenthesis 
+
+
+SQL> create table student(
+  2  studno integer(10) primary key,
+  3  studname varchar2(20),
+  4  stud_dob date not null,
+  5  stud_major varchar2(8));
+studno integer(10) primary key,
+              *
+ERROR at line 2:
+ORA-00907: missing right parenthesis 
+
+
+SQL> create table student(
+  2  studno char(10) primary key,
+  3  studname varchar2(20),
+  4  stud_dob date not null,
+  5  stud_major varchar2(8));
+
+Table created.
+
+SQL> insert into student values (studno='636318', studname='John', stud_dob='12-sep-1989');
+insert into student values (studno='636318', studname='John', stud_dob='12-sep-1989')
+                                  *
+ERROR at line 1:
+ORA-00917: missing comma 
+
+
+SQL> insert into student(studno, studname, stud_dob) values ('636318', 'John' , '12-sep-1989');
+
+1 row created.
+
+SQL> insert into students values  ( '&studno', '&studname' ,'&stud_dob', '&stud_major');
+Enter value for studno: 636211
+Enter value for studname: Tom
+Enter value for stud_dob: 16-May-1992
+Enter value for stud_major: APT
+old   1: insert into students values  ( '&studno', '&studname' ,'&stud_dob', '&stud_major')
+new   1: insert into students values  ( '636211', 'Tom' ,'16-May-1992', 'APT')
+insert into students values  ( '636211', 'Tom' ,'16-May-1992', 'APT')
+            *
+ERROR at line 1:
+ORA-00942: table or view does not exist 
+
+
+SQL> /
+Enter value for studno: 636112
+Enter value for studname: Bob
+Enter value for stud_dob: 18-Oct-1986 
+Enter value for stud_major: IST
+old   1: insert into students values  ( '&studno', '&studname' ,'&stud_dob', '&stud_major')
+new   1: insert into students values  ( '636112', 'Bob' ,'18-Oct-1986 ', 'IST')
+insert into students values  ( '636112', 'Bob' ,'18-Oct-1986 ', 'IST')
+            *
+ERROR at line 1:
+ORA-00942: table or view does not exist 
+
+
+SQL> select * from student;
+
+STUDNO     STUDNAME             STUD_DOB  STUD_MAJ                              
+---------- -------------------- --------- --------                              
+636318     John                 12-SEP-89                                       
+
+SQL> insert into student values('636211', 'Tom', '16-may-1992', 'APT')
+  2  ;
+
+1 row created.
+
+SQL> insert into student values  ( '&studno', '&studname' ,'&stud_dob', '&stud_major');
+Enter value for studno: 636112
+Enter value for studname: Bob
+Enter value for stud_dob: 18-Oct-1986 
+Enter value for stud_major: IST
+old   1: insert into student values  ( '&studno', '&studname' ,'&stud_dob', '&stud_major')
+new   1: insert into student values  ( '636112', 'Bob' ,'18-Oct-1986 ', 'IST')
+
+1 row created.
+
+SQL> /
+Enter value for studno: 646431
+Enter value for studname: Jean
+Enter value for stud_dob: 12-Apr-1978
+Enter value for stud_major: IBA
+old   1: insert into student values  ( '&studno', '&studname' ,'&stud_dob', '&stud_major')
+new   1: insert into student values  ( '646431', 'Jean' ,'12-Apr-1978', 'IBA')
+
+1 row created.
+
+SQL> /
+Enter value for studno: 636416
+Enter value for studname: Peter
+Enter value for stud_dob: 31-Dec-1994
+Enter value for stud_major: IST
+old   1: insert into student values  ( '&studno', '&studname' ,'&stud_dob', '&stud_major')
+new   1: insert into student values  ( '636416', 'Peter' ,'31-Dec-1994', 'IST')
+
+1 row created.
+
+SQL> /
+Enter value for studno: 636311
+Enter value for studname: David
+Enter value for stud_dob: 5-Aug-1998
+Enter value for stud_major: APT
+old   1: insert into student values  ( '&studno', '&studname' ,'&stud_dob', '&stud_major')
+new   1: insert into student values  ( '636311', 'David' ,'5-Aug-1998', 'APT')
+
+1 row created.
+
+SQL> /
+Enter value for studno: 637812
+Enter value for studname: Joy
+Enter value for stud_dob: 11-mar-1988
+Enter value for stud_major: IBA
+old   1: insert into student values  ( '&studno', '&studname' ,'&stud_dob', '&stud_major')
+new   1: insert into student values  ( '637812', 'Joy' ,'11-mar-1988', 'IBA')
+
+1 row created.
+
+SQL> /
+Enter value for studno: 646414
+Enter value for studname: Joan
+Enter value for stud_dob: 18-jun-2001
+Enter value for stud_major: IST
+old   1: insert into student values  ( '&studno', '&studname' ,'&stud_dob', '&stud_major')
+new   1: insert into student values  ( '646414', 'Joan' ,'18-jun-2001', 'IST')
+
+1 row created.
+
+SQL> SELECT * from student;
+
+STUDNO     STUDNAME             STUD_DOB  STUD_MAJ                              
+---------- -------------------- --------- --------                              
+636318     John                 12-SEP-89                                       
+636211     Tom                  16-MAY-92 APT                                   
+636112     Bob                  18-OCT-86 IST                                   
+646431     Jean                 12-APR-78 IBA                                   
+636416     Peter                31-DEC-94 IST                                   
+636311     David                05-AUG-98 APT                                   
+637812     Joy                  11-MAR-88 IBA                                   
+646414     Joan                 18-JUN-01 IST                                   
+
+8 rows selected.
+
+SQL>  select * from user_tables
+  2  ;
+
+TABLE_NAME                     TABLESPACE_NAME                                  
+------------------------------ ------------------------------                   
+CLUSTER_NAME                   IOT_NAME                       STATUS            
+------------------------------ ------------------------------ --------          
+  PCT_FREE   PCT_USED  INI_TRANS  MAX_TRANS INITIAL_EXTENT NEXT_EXTENT          
+---------- ---------- ---------- ---------- -------------- -----------          
+MIN_EXTENTS MAX_EXTENTS PCT_INCREASE  FREELISTS FREELIST_GROUPS LOG B   NUM_ROWS
+----------- ----------- ------------ ---------- --------------- --- - ----------
+    BLOCKS EMPTY_BLOCKS  AVG_SPACE  CHAIN_CNT AVG_ROW_LEN                       
+---------- ------------ ---------- ---------- -----------                       
+AVG_SPACE_FREELIST_BLOCKS NUM_FREELIST_BLOCKS                                   
+------------------------- -------------------                                   
+DEGREE                                                                          
+----------------------------------------                                        
+INSTANCES                                CACHE                TABLE_LO          
+---------------------------------------- -------------------- --------          
+SAMPLE_SIZE LAST_ANAL PAR IOT_TYPE     T S NES BUFFER_ FLASH_C CELL_FL ROW_MOVE 
+----------- --------- --- ------------ - - --- ------- ------- ------- -------- 
+GLO USE DURATION        SKIP_COR MON CLUSTER_OWNER                  DEPENDEN    
+--- --- --------------- -------- --- ------------------------------ --------    
+COMPRESS COMPRESS_FOR DRO REA SEG RESULT_                                       
+-------- ------------ --- --- --- -------                                       
+STUDENT                        SYSTEM                                           
+
+TABLE_NAME                     TABLESPACE_NAME                                  
+------------------------------ ------------------------------                   
+CLUSTER_NAME                   IOT_NAME                       STATUS            
+------------------------------ ------------------------------ --------          
+  PCT_FREE   PCT_USED  INI_TRANS  MAX_TRANS INITIAL_EXTENT NEXT_EXTENT          
+---------- ---------- ---------- ---------- -------------- -----------          
+MIN_EXTENTS MAX_EXTENTS PCT_INCREASE  FREELISTS FREELIST_GROUPS LOG B   NUM_ROWS
+----------- ----------- ------------ ---------- --------------- --- - ----------
+    BLOCKS EMPTY_BLOCKS  AVG_SPACE  CHAIN_CNT AVG_ROW_LEN                       
+---------- ------------ ---------- ---------- -----------                       
+AVG_SPACE_FREELIST_BLOCKS NUM_FREELIST_BLOCKS                                   
+------------------------- -------------------                                   
+DEGREE                                                                          
+----------------------------------------                                        
+INSTANCES                                CACHE                TABLE_LO          
+---------------------------------------- -------------------- --------          
+SAMPLE_SIZE LAST_ANAL PAR IOT_TYPE     T S NES BUFFER_ FLASH_C CELL_FL ROW_MOVE 
+----------- --------- --- ------------ - - --- ------- ------- ------- -------- 
+GLO USE DURATION        SKIP_COR MON CLUSTER_OWNER                  DEPENDEN    
+--- --- --------------- -------- --- ------------------------------ --------    
+COMPRESS COMPRESS_FOR DRO REA SEG RESULT_                                       
+-------- ------------ --- --- --- -------                                       
+                                                              VALID             
+
+TABLE_NAME                     TABLESPACE_NAME                                  
+------------------------------ ------------------------------                   
+CLUSTER_NAME                   IOT_NAME                       STATUS            
+------------------------------ ------------------------------ --------          
+  PCT_FREE   PCT_USED  INI_TRANS  MAX_TRANS INITIAL_EXTENT NEXT_EXTENT          
+---------- ---------- ---------- ---------- -------------- -----------          
+MIN_EXTENTS MAX_EXTENTS PCT_INCREASE  FREELISTS FREELIST_GROUPS LOG B   NUM_ROWS
+----------- ----------- ------------ ---------- --------------- --- - ----------
+    BLOCKS EMPTY_BLOCKS  AVG_SPACE  CHAIN_CNT AVG_ROW_LEN                       
+---------- ------------ ---------- ---------- -----------                       
+AVG_SPACE_FREELIST_BLOCKS NUM_FREELIST_BLOCKS                                   
+------------------------- -------------------                                   
+DEGREE                                                                          
+----------------------------------------                                        
+INSTANCES                                CACHE                TABLE_LO          
+---------------------------------------- -------------------- --------          
+SAMPLE_SIZE LAST_ANAL PAR IOT_TYPE     T S NES BUFFER_ FLASH_C CELL_FL ROW_MOVE 
+----------- --------- --- ------------ - - --- ------- ------- ------- -------- 
+GLO USE DURATION        SKIP_COR MON CLUSTER_OWNER                  DEPENDEN    
+--- --- --------------- -------- --- ------------------------------ --------    
+COMPRESS COMPRESS_FOR DRO REA SEG RESULT_                                       
+-------- ------------ --- --- --- -------                                       
+        10         40          1        255          65536     1048576          
+
+TABLE_NAME                     TABLESPACE_NAME                                  
+------------------------------ ------------------------------                   
+CLUSTER_NAME                   IOT_NAME                       STATUS            
+------------------------------ ------------------------------ --------          
+  PCT_FREE   PCT_USED  INI_TRANS  MAX_TRANS INITIAL_EXTENT NEXT_EXTENT          
+---------- ---------- ---------- ---------- -------------- -----------          
+MIN_EXTENTS MAX_EXTENTS PCT_INCREASE  FREELISTS FREELIST_GROUPS LOG B   NUM_ROWS
+----------- ----------- ------------ ---------- --------------- --- - ----------
+    BLOCKS EMPTY_BLOCKS  AVG_SPACE  CHAIN_CNT AVG_ROW_LEN                       
+---------- ------------ ---------- ---------- -----------                       
+AVG_SPACE_FREELIST_BLOCKS NUM_FREELIST_BLOCKS                                   
+------------------------- -------------------                                   
+DEGREE                                                                          
+----------------------------------------                                        
+INSTANCES                                CACHE                TABLE_LO          
+---------------------------------------- -------------------- --------          
+SAMPLE_SIZE LAST_ANAL PAR IOT_TYPE     T S NES BUFFER_ FLASH_C CELL_FL ROW_MOVE 
+----------- --------- --- ------------ - - --- ------- ------- ------- -------- 
+GLO USE DURATION        SKIP_COR MON CLUSTER_OWNER                  DEPENDEN    
+--- --- --------------- -------- --- ------------------------------ --------    
+COMPRESS COMPRESS_FOR DRO REA SEG RESULT_                                       
+-------- ------------ --- --- --- -------                                       
+          1  2147483645                       1               1 YES N           
+
+TABLE_NAME                     TABLESPACE_NAME                                  
+------------------------------ ------------------------------                   
+CLUSTER_NAME                   IOT_NAME                       STATUS            
+------------------------------ ------------------------------ --------          
+  PCT_FREE   PCT_USED  INI_TRANS  MAX_TRANS INITIAL_EXTENT NEXT_EXTENT          
+---------- ---------- ---------- ---------- -------------- -----------          
+MIN_EXTENTS MAX_EXTENTS PCT_INCREASE  FREELISTS FREELIST_GROUPS LOG B   NUM_ROWS
+----------- ----------- ------------ ---------- --------------- --- - ----------
+    BLOCKS EMPTY_BLOCKS  AVG_SPACE  CHAIN_CNT AVG_ROW_LEN                       
+---------- ------------ ---------- ---------- -----------                       
+AVG_SPACE_FREELIST_BLOCKS NUM_FREELIST_BLOCKS                                   
+------------------------- -------------------                                   
+DEGREE                                                                          
+----------------------------------------                                        
+INSTANCES                                CACHE                TABLE_LO          
+---------------------------------------- -------------------- --------          
+SAMPLE_SIZE LAST_ANAL PAR IOT_TYPE     T S NES BUFFER_ FLASH_C CELL_FL ROW_MOVE 
+----------- --------- --- ------------ - - --- ------- ------- ------- -------- 
+GLO USE DURATION        SKIP_COR MON CLUSTER_OWNER                  DEPENDEN    
+--- --- --------------- -------- --- ------------------------------ --------    
+COMPRESS COMPRESS_FOR DRO REA SEG RESULT_                                       
+-------- ------------ --- --- --- -------                                       
+                                                                                
+
+TABLE_NAME                     TABLESPACE_NAME                                  
+------------------------------ ------------------------------                   
+CLUSTER_NAME                   IOT_NAME                       STATUS            
+------------------------------ ------------------------------ --------          
+  PCT_FREE   PCT_USED  INI_TRANS  MAX_TRANS INITIAL_EXTENT NEXT_EXTENT          
+---------- ---------- ---------- ---------- -------------- -----------          
+MIN_EXTENTS MAX_EXTENTS PCT_INCREASE  FREELISTS FREELIST_GROUPS LOG B   NUM_ROWS
+----------- ----------- ------------ ---------- --------------- --- - ----------
+    BLOCKS EMPTY_BLOCKS  AVG_SPACE  CHAIN_CNT AVG_ROW_LEN                       
+---------- ------------ ---------- ---------- -----------                       
+AVG_SPACE_FREELIST_BLOCKS NUM_FREELIST_BLOCKS                                   
+------------------------- -------------------                                   
+DEGREE                                                                          
+----------------------------------------                                        
+INSTANCES                                CACHE                TABLE_LO          
+---------------------------------------- -------------------- --------          
+SAMPLE_SIZE LAST_ANAL PAR IOT_TYPE     T S NES BUFFER_ FLASH_C CELL_FL ROW_MOVE 
+----------- --------- --- ------------ - - --- ------- ------- ------- -------- 
+GLO USE DURATION        SKIP_COR MON CLUSTER_OWNER                  DEPENDEN    
+--- --- --------------- -------- --- ------------------------------ --------    
+COMPRESS COMPRESS_FOR DRO REA SEG RESULT_                                       
+-------- ------------ --- --- --- -------                                       
+                                                                                
+
+TABLE_NAME                     TABLESPACE_NAME                                  
+------------------------------ ------------------------------                   
+CLUSTER_NAME                   IOT_NAME                       STATUS            
+------------------------------ ------------------------------ --------          
+  PCT_FREE   PCT_USED  INI_TRANS  MAX_TRANS INITIAL_EXTENT NEXT_EXTENT          
+---------- ---------- ---------- ---------- -------------- -----------          
+MIN_EXTENTS MAX_EXTENTS PCT_INCREASE  FREELISTS FREELIST_GROUPS LOG B   NUM_ROWS
+----------- ----------- ------------ ---------- --------------- --- - ----------
+    BLOCKS EMPTY_BLOCKS  AVG_SPACE  CHAIN_CNT AVG_ROW_LEN                       
+---------- ------------ ---------- ---------- -----------                       
+AVG_SPACE_FREELIST_BLOCKS NUM_FREELIST_BLOCKS                                   
+------------------------- -------------------                                   
+DEGREE                                                                          
+----------------------------------------                                        
+INSTANCES                                CACHE                TABLE_LO          
+---------------------------------------- -------------------- --------          
+SAMPLE_SIZE LAST_ANAL PAR IOT_TYPE     T S NES BUFFER_ FLASH_C CELL_FL ROW_MOVE 
+----------- --------- --- ------------ - - --- ------- ------- ------- -------- 
+GLO USE DURATION        SKIP_COR MON CLUSTER_OWNER                  DEPENDEN    
+--- --- --------------- -------- --- ------------------------------ --------    
+COMPRESS COMPRESS_FOR DRO REA SEG RESULT_                                       
+-------- ------------ --- --- --- -------                                       
+         1                                                                      
+
+TABLE_NAME                     TABLESPACE_NAME                                  
+------------------------------ ------------------------------                   
+CLUSTER_NAME                   IOT_NAME                       STATUS            
+------------------------------ ------------------------------ --------          
+  PCT_FREE   PCT_USED  INI_TRANS  MAX_TRANS INITIAL_EXTENT NEXT_EXTENT          
+---------- ---------- ---------- ---------- -------------- -----------          
+MIN_EXTENTS MAX_EXTENTS PCT_INCREASE  FREELISTS FREELIST_GROUPS LOG B   NUM_ROWS
+----------- ----------- ------------ ---------- --------------- --- - ----------
+    BLOCKS EMPTY_BLOCKS  AVG_SPACE  CHAIN_CNT AVG_ROW_LEN                       
+---------- ------------ ---------- ---------- -----------                       
+AVG_SPACE_FREELIST_BLOCKS NUM_FREELIST_BLOCKS                                   
+------------------------- -------------------                                   
+DEGREE                                                                          
+----------------------------------------                                        
+INSTANCES                                CACHE                TABLE_LO          
+---------------------------------------- -------------------- --------          
+SAMPLE_SIZE LAST_ANAL PAR IOT_TYPE     T S NES BUFFER_ FLASH_C CELL_FL ROW_MOVE 
+----------- --------- --- ------------ - - --- ------- ------- ------- -------- 
+GLO USE DURATION        SKIP_COR MON CLUSTER_OWNER                  DEPENDEN    
+--- --- --------------- -------- --- ------------------------------ --------    
+COMPRESS COMPRESS_FOR DRO REA SEG RESULT_                                       
+-------- ------------ --- --- --- -------                                       
+         1                                   N                ENABLED           
+
+TABLE_NAME                     TABLESPACE_NAME                                  
+------------------------------ ------------------------------                   
+CLUSTER_NAME                   IOT_NAME                       STATUS            
+------------------------------ ------------------------------ --------          
+  PCT_FREE   PCT_USED  INI_TRANS  MAX_TRANS INITIAL_EXTENT NEXT_EXTENT          
+---------- ---------- ---------- ---------- -------------- -----------          
+MIN_EXTENTS MAX_EXTENTS PCT_INCREASE  FREELISTS FREELIST_GROUPS LOG B   NUM_ROWS
+----------- ----------- ------------ ---------- --------------- --- - ----------
+    BLOCKS EMPTY_BLOCKS  AVG_SPACE  CHAIN_CNT AVG_ROW_LEN                       
+---------- ------------ ---------- ---------- -----------                       
+AVG_SPACE_FREELIST_BLOCKS NUM_FREELIST_BLOCKS                                   
+------------------------- -------------------                                   
+DEGREE                                                                          
+----------------------------------------                                        
+INSTANCES                                CACHE                TABLE_LO          
+---------------------------------------- -------------------- --------          
+SAMPLE_SIZE LAST_ANAL PAR IOT_TYPE     T S NES BUFFER_ FLASH_C CELL_FL ROW_MOVE 
+----------- --------- --- ------------ - - --- ------- ------- ------- -------- 
+GLO USE DURATION        SKIP_COR MON CLUSTER_OWNER                  DEPENDEN    
+--- --- --------------- -------- --- ------------------------------ --------    
+COMPRESS COMPRESS_FOR DRO REA SEG RESULT_                                       
+-------- ------------ --- --- --- -------                                       
+                      NO               N N NO  DEFAULT DEFAULT DEFAULT DISABLED 
+
+TABLE_NAME                     TABLESPACE_NAME                                  
+------------------------------ ------------------------------                   
+CLUSTER_NAME                   IOT_NAME                       STATUS            
+------------------------------ ------------------------------ --------          
+  PCT_FREE   PCT_USED  INI_TRANS  MAX_TRANS INITIAL_EXTENT NEXT_EXTENT          
+---------- ---------- ---------- ---------- -------------- -----------          
+MIN_EXTENTS MAX_EXTENTS PCT_INCREASE  FREELISTS FREELIST_GROUPS LOG B   NUM_ROWS
+----------- ----------- ------------ ---------- --------------- --- - ----------
+    BLOCKS EMPTY_BLOCKS  AVG_SPACE  CHAIN_CNT AVG_ROW_LEN                       
+---------- ------------ ---------- ---------- -----------                       
+AVG_SPACE_FREELIST_BLOCKS NUM_FREELIST_BLOCKS                                   
+------------------------- -------------------                                   
+DEGREE                                                                          
+----------------------------------------                                        
+INSTANCES                                CACHE                TABLE_LO          
+---------------------------------------- -------------------- --------          
+SAMPLE_SIZE LAST_ANAL PAR IOT_TYPE     T S NES BUFFER_ FLASH_C CELL_FL ROW_MOVE 
+----------- --------- --- ------------ - - --- ------- ------- ------- -------- 
+GLO USE DURATION        SKIP_COR MON CLUSTER_OWNER                  DEPENDEN    
+--- --- --------------- -------- --- ------------------------------ --------    
+COMPRESS COMPRESS_FOR DRO REA SEG RESULT_                                       
+-------- ------------ --- --- --- -------                                       
+NO  NO                  DISABLED YES                                DISABLED    
+
+TABLE_NAME                     TABLESPACE_NAME                                  
+------------------------------ ------------------------------                   
+CLUSTER_NAME                   IOT_NAME                       STATUS            
+------------------------------ ------------------------------ --------          
+  PCT_FREE   PCT_USED  INI_TRANS  MAX_TRANS INITIAL_EXTENT NEXT_EXTENT          
+---------- ---------- ---------- ---------- -------------- -----------          
+MIN_EXTENTS MAX_EXTENTS PCT_INCREASE  FREELISTS FREELIST_GROUPS LOG B   NUM_ROWS
+----------- ----------- ------------ ---------- --------------- --- - ----------
+    BLOCKS EMPTY_BLOCKS  AVG_SPACE  CHAIN_CNT AVG_ROW_LEN                       
+---------- ------------ ---------- ---------- -----------                       
+AVG_SPACE_FREELIST_BLOCKS NUM_FREELIST_BLOCKS                                   
+------------------------- -------------------                                   
+DEGREE                                                                          
+----------------------------------------                                        
+INSTANCES                                CACHE                TABLE_LO          
+---------------------------------------- -------------------- --------          
+SAMPLE_SIZE LAST_ANAL PAR IOT_TYPE     T S NES BUFFER_ FLASH_C CELL_FL ROW_MOVE 
+----------- --------- --- ------------ - - --- ------- ------- ------- -------- 
+GLO USE DURATION        SKIP_COR MON CLUSTER_OWNER                  DEPENDEN    
+--- --- --------------- -------- --- ------------------------------ --------    
+COMPRESS COMPRESS_FOR DRO REA SEG RESULT_                                       
+-------- ------------ --- --- --- -------                                       
+DISABLED              NO  NO  YES DEFAULT                                       
+
+TABLE_NAME                     TABLESPACE_NAME                                  
+------------------------------ ------------------------------                   
+CLUSTER_NAME                   IOT_NAME                       STATUS            
+------------------------------ ------------------------------ --------          
+  PCT_FREE   PCT_USED  INI_TRANS  MAX_TRANS INITIAL_EXTENT NEXT_EXTENT          
+---------- ---------- ---------- ---------- -------------- -----------          
+MIN_EXTENTS MAX_EXTENTS PCT_INCREASE  FREELISTS FREELIST_GROUPS LOG B   NUM_ROWS
+----------- ----------- ------------ ---------- --------------- --- - ----------
+    BLOCKS EMPTY_BLOCKS  AVG_SPACE  CHAIN_CNT AVG_ROW_LEN                       
+---------- ------------ ---------- ---------- -----------                       
+AVG_SPACE_FREELIST_BLOCKS NUM_FREELIST_BLOCKS                                   
+------------------------- -------------------                                   
+DEGREE                                                                          
+----------------------------------------                                        
+INSTANCES                                CACHE                TABLE_LO          
+---------------------------------------- -------------------- --------          
+SAMPLE_SIZE LAST_ANAL PAR IOT_TYPE     T S NES BUFFER_ FLASH_C CELL_FL ROW_MOVE 
+----------- --------- --- ------------ - - --- ------- ------- ------- -------- 
+GLO USE DURATION        SKIP_COR MON CLUSTER_OWNER                  DEPENDEN    
+--- --- --------------- -------- --- ------------------------------ --------    
+COMPRESS COMPRESS_FOR DRO REA SEG RESULT_                                       
+-------- ------------ --- --- --- -------                                       
+                                                                                
+
+SQL> select * from count;
+select * from count
+              *
+ERROR at line 1:
+ORA-00942: table or view does not exist 
+
+
+SQL> select * from cat;
+
+TABLE_NAME                     TABLE_TYPE                                       
+------------------------------ -----------                                      
+STUDENT                        TABLE                                            
+
+SQL> select count(*) from cat;
+
+  COUNT(*)                                                                      
+----------                                                                      
+         1                                                                      
+
+SQL> create table birthdays as select studno , studname, stud_dob from student;
+
+Table created.
+
+SQL> select * from birthdays;
+
+STUDNO     STUDNAME             STUD_DOB                                        
+---------- -------------------- ---------                                       
+636318     John                 12-SEP-89                                       
+636211     Tom                  16-MAY-92                                       
+636112     Bob                  18-OCT-86                                       
+646431     Jean                 12-APR-78                                       
+636416     Peter                31-DEC-94                                       
+636311     David                05-AUG-98                                       
+637812     Joy                  11-MAR-88                                       
+646414     Joan                 18-JUN-01                                       
+
+8 rows selected.
+
+SQL> create table coursework as select studno , studname, stud_major from student;
+
+Table created.
+
+SQL> select * from coursework;
+
+STUDNO     STUDNAME             STUD_MAJ                                        
+---------- -------------------- --------                                        
+636318     John                                                                 
+636211     Tom                  APT                                             
+636112     Bob                  IST                                             
+646431     Jean                 IBA                                             
+636416     Peter                IST                                             
+636311     David                APT                                             
+637812     Joy                  IBA                                             
+646414     Joan                 IST                                             
+
+8 rows selected.
+
+SQL> alter table student
+  2  add GPA number(4,2);
+
+Table altered.
+
+SQL> select * from student;
+
+STUDNO     STUDNAME             STUD_DOB  STUD_MAJ        GPA                   
+---------- -------------------- --------- -------- ----------                   
+636318     John                 12-SEP-89                                       
+636211     Tom                  16-MAY-92 APT                                   
+636112     Bob                  18-OCT-86 IST                                   
+646431     Jean                 12-APR-78 IBA                                   
+636416     Peter                31-DEC-94 IST                                   
+636311     David                05-AUG-98 APT                                   
+637812     Joy                  11-MAR-88 IBA                                   
+646414     Joan                 18-JUN-01 IST                                   
+
+8 rows selected.
+
+SQL> -- change data type
+SQL> alter table student
+  2  modify(studno integer);
+modify(studno integer)
+       *
+ERROR at line 2:
+ORA-01439: column to be modified must be empty to change datatype 
+
+
+SQL> commit;
+
+Commit complete.
+
+SQL> exit;

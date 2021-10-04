@@ -1,0 +1,296 @@
+SQL> spool
+currently spooling to c:\users\austin\desktop\makeuptestQ1.txt
+SQL> connect austin
+Connected.
+SQL> create table items(
+  2  Item_code integer primary key,
+  3  First_name varchar2(20),
+  4  Last_name varchar2(20),
+  5  Qtty integer,
+  6  Price number(8,2));
+
+Table created.
+
+SQL> create table assigned(
+  2  emp_num int primary key,
+  3  emp_name varchar2(20),
+  4  Item_code references items,
+  5  item_fname varchar2(20),
+  6  item_sname varchar2(20));
+
+Table created.
+
+SQL> -- to create a trigger preventing inserts of price < 20
+
+SQL>  create or replace trigger pricecheck
+  2    after insert or update of Price on items
+  3    for each row
+  4    begin
+  5    if (:new.Price<20) then
+  6    RAISE_APPLICATION_ERROR (-20030, 'PRICE CANNOT BE LESS THAN 20');
+  7    end if;
+  8    end;
+  9  /
+
+Trigger created.
+
+SQL> -- to create sequence to add values
+SQL> create sequence item_seq
+  2  start with 3281
+  3  increment by 101;
+
+Sequence created.
+
+SQL> insert into items values (item_seq.nextval, 'Garden', 'Scissor', 52, 145 );
+
+1 row created.
+
+SQL> insert into items values (item_seq.nextval, 'Pruning', 'Secateurs', 38, 456 );
+
+1 row created.
+
+SQL> insert into items values (item_seq.nextval, 'Hand', 'Weeder', 20, 56.75 );
+
+1 row created.
+
+SQL> insert into items values (item_seq.nextval, 'Digging', 'Trowel', 45, 88 );
+
+1 row created.
+
+SQL> insert into items values (item_seq.nextval, 'Hedge', 'Shear', 30, 28.50 );
+
+1 row created.
+
+SQL> insert into items values (item_seq.nextval, 'Hand', 'Cultivators', 40, 78.25 );
+
+1 row created.
+
+SQL> insert into assigned values (331,'Abdi', 3584,'Digging', 'Trowel');
+
+1 row created.
+
+SQL> insert into assigned values (332,'Abdul', 3483,'Hand', 'Weeder');
+
+1 row created.
+
+SQL> insert into assigned values (333,'Abdikadir', 3786,'Hand', 'Cultivators');
+
+1 row created.
+
+SQL> select * from items;
+
+ ITEM_CODE FIRST_NAME           LAST_NAME                  QTTY      PRICE      
+---------- -------------------- -------------------- ---------- ----------      
+      3281 Garden               Scissor                      52        145      
+      3382 Pruning              Secateurs                    38        456      
+      3483 Hand                 Weeder                       20      56.75      
+      3584 Digging              Trowel                       45         88      
+      3685 Hedge                Shear                        30       28.5      
+      3786 Hand                 Cultivators                  40      78.25      
+
+6 rows selected.                                                              
+                                                                              
+
+SQL> set linesize 600;
+SQL> select * from assigned;
+
+   EMP_NUM EMP_NAME              ITEM_CODE ITEM_FNAME           ITEM_SNAME                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
+---------- -------------------- ---------- -------------------- --------------------                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
+       331 Abdi                       3584 Digging              Trowel                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  
+       332 Abdul                      3483 Hand                 Weeder                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  
+       333 Abdikadir                  3786 Hand                 Cultivators                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             
+
+SQL> create or replace procedure UPDATEPRICES
+  2  AS
+  3  BEGIN
+  4  Update items set Price = Price * 2;
+  5  end;
+  6  /
+
+Procedure created.
+
+SQL> exec UPDATEPRICES;
+
+PL/SQL procedure successfully completed.
+
+SQL> select * from items;
+
+ ITEM_CODE FIRST_NAME           LAST_NAME                  QTTY      PRICE                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
+---------- -------------------- -------------------- ---------- ----------                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
+      3281 Garden               Scissor                      52        290                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
+      3382 Pruning              Secateurs                    38        912                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
+      3483 Hand                 Weeder                       20      113.5                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
+      3584 Digging              Trowel                       45        176                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
+      3685 Hedge                Shear                        30         57                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
+      3786 Hand                 Cultivators                  40      156.5                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
+
+6 rows selected.
+
+SQL> -- QUESTION IV create a composite index
+SQL> create index idx_items
+  2  on items (First_name, Price);
+
+Index created.
+
+SQL> select * from items where Qtty < (select avg(Qtty) from items);
+
+ ITEM_CODE FIRST_NAME           LAST_NAME                  QTTY      PRICE                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
+---------- -------------------- -------------------- ---------- ----------                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
+      3483 Hand                 Weeder                       20      113.5                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
+      3685 Hedge                Shear                        30         57                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
+
+SQL> --add column status to items
+SQL> alter table items
+  2  add status varchar2(20);
+
+Table altered.
+
+SQL> select * from items;
+
+ ITEM_CODE FIRST_NAME           LAST_NAME                  QTTY      PRICE STATUS                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
+---------- -------------------- -------------------- ---------- ---------- --------------------                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
+      3281 Garden               Scissor                      52        290                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
+      3382 Pruning              Secateurs                    38        912                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
+      3483 Hand                 Weeder                       20      113.5                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
+      3584 Digging              Trowel                       45        176                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
+      3685 Hedge                Shear                        30         57                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
+      3786 Hand                 Cultivators                  40      156.5                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
+
+6 rows selected.
+
+SQL> -- question 6 create synonym
+
+SQL> create synonym products for items;
+
+Synonym created.
+
+SQL> -- question vii privs to user apt 1050
+SQL> connect system
+Connected.
+
+SQL> connect austin
+Connected.
+SQL> grant select, update(price) on products to apt1050 with grant option;
+
+Grant succeeded.
+
+SQL> -- create a view for price > 100 without migration
+SQL> create or replace view OVER2000 AS select * from employees where salary > 2000 WITH CHECK OPTION;
+
+View created.
+
+SQL> create or replace view OVER100 AS select * from products where Price > 100 WITH CHECK OPTION;
+
+View created.
+
+SQL> select * from OVER100;
+
+ ITEM_CODE FIRST_NAME           LAST_NAME                  QTTY      PRICE STATUS                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
+---------- -------------------- -------------------- ---------- ---------- --------------------                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
+      3281 Garden               Scissor                      52        290                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
+      3382 Pruning              Secateurs                    38        912                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
+      3483 Hand                 Weeder                       20      113.5                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
+      3584 Digging              Trowel                       45        176                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
+      3786 Hand                 Cultivators                  40      156.5                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
+
+SQL> revoke update on products from apt1050;
+
+Revoke succeeded.
+
+SQL> -- equijoin to list item code, price,employee name
+SQL> commit;
+
+Commit complete.
+
+SQL> select products.Item_code, products.Price, assigned.emp_name from products, assigned where products.Item_code=assigned.Item_code;
+
+ ITEM_CODE      PRICE EMP_NAME                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
+---------- ---------- --------------------                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
+      3483      113.5 Abdul                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             
+      3584        176 Abdi                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
+      3786      156.5 Abdikadir                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
+
+SQL> --inner join to list itemcode price and employee name
+SQL> select products.Item_code, products.Price, assigned.emp_name from products INNER JOIN assigned ON products.Item_code=assigned.Item_code;
+
+ ITEM_CODE      PRICE EMP_NAME                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
+---------- ---------- --------------------                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
+      3483      113.5 Abdul                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             
+      3584        176 Abdi                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
+      3786      156.5 Abdikadir                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
+
+SQL> --Natural join
+SQL> select Item_code, Price, emp_name from products NATURAL JOIN assigned;
+
+ ITEM_CODE      PRICE EMP_NAME                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
+---------- ---------- --------------------                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
+      3483      113.5 Abdul                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             
+      3584        176 Abdi                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
+      3786      156.5 Abdikadir                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
+
+SQL> --cartesian product
+
+SQL> set pagesize 500;
+SQL> select products.Item_code, products.Price, assigned.emp_name from products, assigned;
+
+ ITEM_CODE      PRICE EMP_NAME                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
+---------- ---------- --------------------                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
+      3281        290 Abdi                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
+      3382        912 Abdi                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
+      3483      113.5 Abdi                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
+      3584        176 Abdi                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
+      3685         57 Abdi                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
+      3786      156.5 Abdi                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
+      3281        290 Abdul                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             
+      3382        912 Abdul                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             
+      3483      113.5 Abdul                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             
+      3584        176 Abdul                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             
+      3685         57 Abdul                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             
+      3786      156.5 Abdul                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             
+      3281        290 Abdikadir                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
+      3382        912 Abdikadir                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
+      3483      113.5 Abdikadir                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
+      3584        176 Abdikadir                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
+      3685         57 Abdikadir                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
+      3786      156.5 Abdikadir                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
+
+18 rows selected.
+
+SQL> select * from products where last_name like 'S%' AND Price>100;
+
+ ITEM_CODE FIRST_NAME           LAST_NAME                  QTTY      PRICE STATUS                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
+---------- -------------------- -------------------- ---------- ---------- --------------------                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
+      3281 Garden               Scissor                      52        290                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
+      3382 Pruning              Secateurs                    38        912                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
+
+SQL> -- remove column quantity from items
+
+SQL> alter table items
+  2  drop column Qtty;
+
+Table altered.
+
+SQL> select * from items;
+
+ ITEM_CODE FIRST_NAME           LAST_NAME                 PRICE STATUS                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  
+---------- -------------------- -------------------- ---------- --------------------                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
+      3281 Garden               Scissor                     290                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
+      3382 Pruning              Secateurs                   912                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
+      3483 Hand                 Weeder                    113.5                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
+      3584 Digging              Trowel                      176                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
+      3685 Hedge                Shear                        57                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
+      3786 Hand                 Cultivators               156.5                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
+
+6 rows selected.
+
+SQL> -- removing priviledges given to apt1050
+
+SQL> revoke select on items from apt1050;
+
+Revoke succeeded.
+
+SQL> commit ;
+
+Commit complete.
+
+SQL> exit;

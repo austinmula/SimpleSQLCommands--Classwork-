@@ -1,0 +1,489 @@
+SQL> spool
+currently spooling to c:\users\austin\desktop\endsem.txt
+SQL> connect amula
+ERROR:
+ORA-01017: invalid username/password; logon denied 
+
+
+SQL> connect austin
+Connected.
+SQL> create table farmers(
+  2  own_id int primary key,
+  3  lname char(20),
+  4  fname varchar2(20),
+  5  num_animals int,
+  6  location varchar2(20));
+
+Table created.
+
+SQL> insert into farmers values (211, 'GARCIA', 'MWANGI', 260 , 'KAMAKWA');
+
+1 row created.
+
+SQL> insert into farmers values (222, 'PARIKH', 'LYSTER', ' ' , 'KASARANI');
+insert into farmers values (222, 'PARIKH', 'LYSTER', ' ' , 'KASARANI')
+                                                     *
+ERROR at line 1:
+ORA-01722: invalid number 
+
+
+SQL> insert into farmers values (222, 'PARIKH', 'LYSTER', '' , 'KASARANI');
+
+1 row created.
+
+SQL> insert into farmers values (233, 'EHERA', 'DLAMINI', '308' , 'ROYSAMBU');
+
+1 row created.
+
+SQL> insert into farmers values (234, 'EISENHAUER', 'KINYAITTI', '' , 'KAYOLE');
+
+1 row created.
+
+SQL> insert into farmers values (255, 'BAYER', 'ACHEMBE', '600' , 'THIKA');
+
+1 row created.
+
+SQL> insert into farmers values (266, 'MOLLY', 'HAMISI', '768' , 'RUIRU');
+
+1 row created.
+
+SQL> CREATE table animals(
+  2  anim_id int primary key,
+  3  anim_name varchar2(20) NOT NULL,
+  4  breed char(15) CHECK (BREED IN ('FRENCH', 'INDIAN', 'RUSSIAN', 'GERMAN')),
+  5  price int NOT NULL,
+  6  own_id references farmers ON DELETE CASCADE);
+
+Table created.
+
+SQL> create sequence id_seq
+  2  start with 1111
+  3  increment by 101;
+
+Sequence created.
+
+SQL> insert into animals values (id_seq.nextval, 'ABONDANCE' , 'FRENCH', 70000 , 233);
+
+1 row created.
+
+SQL> insert into animals values (id_seq.nextval, 'RUSSIAN' , 'FRENCH', 21000 , 234);
+
+1 row created.
+
+SQL> insert into animals values (id_seq.nextval, 'INDIAN' , 'FRENCH', 17800 , 211);
+
+1 row created.
+
+SQL> insert into animals values (id_seq.nextval, 'AMRITMAHAL' , 'FRENCH', 30000 , 255);
+
+1 row created.
+
+SQL> insert into animals values (id_seq.nextval, 'CAMARGUE' , 'FRENCH', 59000 , 211);
+
+1 row created.
+
+SQL> insert into animals values (id_seq.nextval, 'TERANTAISE' , 'FRENCH', 59000 , 266);
+
+1 row created.
+
+SQL> insert into animals values (id_seq.nextval, 'KANKREJ' , 'INDIAN', 37000 , 222);
+
+1 row created.
+
+SQL> insert into animals values (id_seq.nextval, 'VORDERWALD' , 'GERMAN', 23600 , 266);
+
+1 row created.
+
+SQL> insert into animals values (id_seq.nextval, 'GELBEIV' , 'GERMAN', 89000 , 222);
+
+1 row created.
+
+SQL> UPDATE animals set anim_name='KURGANSKAYA' WHERE anim_id=1212;
+
+1 row updated.
+
+SQL> UPDATE animals set breed='RUSSIAN' WHERE anim_id=1212;
+
+1 row updated.
+
+SQL> UPDATE animals set breed='INDIAN', anim_name= 'HALLIKAR' WHERE anim_id=1313;
+
+1 row updated.
+
+SQL> UPDATE animals set breed='INDIAN', anim_name= 'AMRITMAHAL' WHERE anim_id=1414;
+
+1 row updated.
+
+SQL> UPDATE animals set price= 66000 WHERE anim_id=1616;
+
+1 row updated.
+
+SQL> select * from farmers;
+
+    OWN_ID LNAME                FNAME                NUM_ANIMALS                
+---------- -------------------- -------------------- -----------                
+LOCATION                                                                        
+--------------------                                                            
+       211 GARCIA               MWANGI                       260                
+KAMAKWA                                                                         
+                                                                                
+       222 PARIKH               LYSTER                                          
+KASARANI                                                                        
+                                                                                
+       233 EHERA                DLAMINI                      308                
+ROYSAMBU                                                                        
+                                                                                
+
+    OWN_ID LNAME                FNAME                NUM_ANIMALS                
+---------- -------------------- -------------------- -----------                
+LOCATION                                                                        
+--------------------                                                            
+       234 EISENHAUER           KINYAITTI                                       
+KAYOLE                                                                          
+                                                                                
+       255 BAYER                ACHEMBE                      600                
+THIKA                                                                           
+                                                                                
+       266 MOLLY                HAMISI                       768                
+RUIRU                                                                           
+                                                                                
+
+6 rows selected.
+
+SQL> set linesize 600;
+SQL> select * from farmers;
+
+    OWN_ID LNAME                FNAME                NUM_ANIMALS LOCATION                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
+---------- -------------------- -------------------- ----------- --------------------                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+       211 GARCIA               MWANGI                       260 KAMAKWA                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
+       222 PARIKH               LYSTER                           KASARANI                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
+       233 EHERA                DLAMINI                      308 ROYSAMBU                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
+       234 EISENHAUER           KINYAITTI                        KAYOLE                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
+       255 BAYER                ACHEMBE                      600 THIKA                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  
+       266 MOLLY                HAMISI                       768 RUIRU                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  
+
+6 rows selected.
+
+SQL> select * from animals;
+
+   ANIM_ID ANIM_NAME            BREED                PRICE     OWN_ID                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+---------- -------------------- --------------- ---------- ----------                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+      1111 ABONDANCE            FRENCH               70000        233                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+      1212 KURGANSKAYA          RUSSIAN              21000        234                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+      1313 HALLIKAR             INDIAN               17800        211                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+      1414 AMRITMAHAL           INDIAN               30000        255                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+      1515 CAMARGUE             FRENCH               59000        211                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+      1616 TERANTAISE           FRENCH               66000        266                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+      1717 KANKREJ              INDIAN               37000        222                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+      1818 VORDERWALD           GERMAN               23600        266                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+      1919 GELBEIV              GERMAN               89000        222                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+
+9 rows selected.
+
+SQL> select * from animals Order by breed, price desc;
+
+   ANIM_ID ANIM_NAME            BREED                PRICE     OWN_ID                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+---------- -------------------- --------------- ---------- ----------                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+      1111 ABONDANCE            FRENCH               70000        233                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+      1616 TERANTAISE           FRENCH               66000        266                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+      1515 CAMARGUE             FRENCH               59000        211                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+      1919 GELBEIV              GERMAN               89000        222                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+      1818 VORDERWALD           GERMAN               23600        266                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+      1717 KANKREJ              INDIAN               37000        222                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+      1414 AMRITMAHAL           INDIAN               30000        255                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+      1313 HALLIKAR             INDIAN               17800        211                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+      1212 KURGANSKAYA          RUSSIAN              21000        234                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+
+9 rows selected.
+
+SQL> -- question 4
+
+SQL> select * from animals where anim_name like 'K%' OR anim_name like '%E';
+
+   ANIM_ID ANIM_NAME            BREED                PRICE     OWN_ID                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+---------- -------------------- --------------- ---------- ----------                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+      1111 ABONDANCE            FRENCH               70000        233                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+      1212 KURGANSKAYA          RUSSIAN              21000        234                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+      1515 CAMARGUE             FRENCH               59000        211                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+      1616 TERANTAISE           FRENCH               66000        266                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+      1717 KANKREJ              INDIAN               37000        222                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+
+SQL> -- question 5
+SQL> alter table farmers
+  2  add farm_size number(5,2);
+
+Table altered.
+
+SQL> select * from farmers
+  2  ;
+
+    OWN_ID LNAME                FNAME                NUM_ANIMALS LOCATION              FARM_SIZE                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
+---------- -------------------- -------------------- ----------- -------------------- ----------                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
+       211 GARCIA               MWANGI                       260 KAMAKWA                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
+       222 PARIKH               LYSTER                           KASARANI                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
+       233 EHERA                DLAMINI                      308 ROYSAMBU                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
+       234 EISENHAUER           KINYAITTI                        KAYOLE                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
+       255 BAYER                ACHEMBE                      600 THIKA                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  
+       266 MOLLY                HAMISI                       768 RUIRU                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  
+
+6 rows selected.
+
+SQL> --question 6
+SQL> select breed, avg(price) from animals GROUP BY breed;
+
+BREED           AVG(PRICE)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
+--------------- ----------                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
+RUSSIAN              21000                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
+INDIAN          28266.6667                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
+GERMAN               56300                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
+FRENCH               65000                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
+
+SQL> -- question 7
+SQL> savepoint save1;
+
+Savepoint created.
+
+SQL> select * from farmers where num_animals IS NULL;
+
+    OWN_ID LNAME                FNAME                NUM_ANIMALS LOCATION              FARM_SIZE                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
+---------- -------------------- -------------------- ----------- -------------------- ----------                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
+       222 PARIKH               LYSTER                           KASARANI                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
+       234 EISENHAUER           KINYAITTI                        KAYOLE                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
+
+SQL> -- question 8
+SQL> update farmers set location='MUIGA', num_animals=666 where own_id = 211;
+
+1 row updated.
+
+SQL> select * from farmers;
+
+    OWN_ID LNAME                FNAME                NUM_ANIMALS LOCATION              FARM_SIZE                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
+---------- -------------------- -------------------- ----------- -------------------- ----------                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
+       211 GARCIA               MWANGI                       666 MUIGA                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  
+       222 PARIKH               LYSTER                           KASARANI                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
+       233 EHERA                DLAMINI                      308 ROYSAMBU                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
+       234 EISENHAUER           KINYAITTI                        KAYOLE                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
+       255 BAYER                ACHEMBE                      600 THIKA                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  
+       266 MOLLY                HAMISI                       768 RUIRU                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  
+
+6 rows selected.
+
+SQL> -- question 9
+
+SQL> select * from animals where anim_name like '%A__';
+
+   ANIM_ID ANIM_NAME            BREED                PRICE     OWN_ID                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+---------- -------------------- --------------- ---------- ----------                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+      1212 KURGANSKAYA          RUSSIAN              21000        234                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+      1818 VORDERWALD           GERMAN               23600        266                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+
+SQL> -- quest 10
+
+SQL> select sum(price) from animals where price < 100000;
+
+SUM(PRICE)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
+----------                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
+    413400                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
+
+SQL> -- question 11
+SQL> drop table cows;
+drop table cows
+           *
+ERROR at line 1:
+ORA-00942: table or view does not exist 
+
+SQL> -- question 12
+SQL> select * from animals where breed='FRENCH' OR breed = 'GERMAN';
+
+   ANIM_ID ANIM_NAME            BREED                PRICE     OWN_ID                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+---------- -------------------- --------------- ---------- ----------                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+      1111 ABONDANCE            FRENCH               70000        233                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+      1515 CAMARGUE             FRENCH               59000        211                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+      1616 TERANTAISE           FRENCH               66000        266                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+      1818 VORDERWALD           GERMAN               23600        266                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+      1919 GELBEIV              GERMAN               89000        222                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+
+SQL> -- 13
+SQL> ALTER SEQUENCE id_seq
+  2  maxvalue 1000;
+ALTER SEQUENCE id_seq
+*
+ERROR at line 1:
+ORA-04009: MAXVALUE cannot be made to be less than the current value 
+
+
+SQL> ALTER SEQUENCE id_seq
+  2  maxvalue 2000;
+
+Sequence altered.
+
+SQL> -- question 14
+SQL> drop sequence id_seq;
+
+Sequence dropped.
+
+SQL> -- 15
+
+SQL> delete from animals where own_id = 266;
+
+2 rows deleted.
+
+SQL> select * from animals;
+
+   ANIM_ID ANIM_NAME            BREED                PRICE     OWN_ID                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+---------- -------------------- --------------- ---------- ----------                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+      1111 ABONDANCE            FRENCH               70000        233                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+      1212 KURGANSKAYA          RUSSIAN              21000        234                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+      1313 HALLIKAR             INDIAN               17800        211                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+      1414 AMRITMAHAL           INDIAN               30000        255                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+      1515 CAMARGUE             FRENCH               59000        211                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+      1717 KANKREJ              INDIAN               37000        222                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+      1919 GELBEIV              GERMAN               89000        222                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+
+7 rows selected.
+
+SQL> -- question 16
+SQL> alter table farmers
+  2  RENAME to wakulima;
+
+Table altered.
+
+SQL> -- question 17
+SQL>
+SQL> create index idx_animals
+  2  on animals(anim_name, breed);
+
+Index created.
+
+SQL> -- question 18
+SQL> 
+SQL> create or replace procedure UPDATEPRICE
+  2  AS
+  3  BEGIN
+  4  update animals set price = price + 100;
+  5  end;
+  6  /
+
+Procedure created.
+
+SQL> exec UPDATEPRICE;
+
+PL/SQL procedure successfully completed.
+
+SQL> select * from animals;
+
+   ANIM_ID ANIM_NAME            BREED                PRICE     OWN_ID                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+---------- -------------------- --------------- ---------- ----------                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+      1111 ABONDANCE            FRENCH               70100        233                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+      1212 KURGANSKAYA          RUSSIAN              21100        234                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+      1313 HALLIKAR             INDIAN               17900        211                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+      1414 AMRITMAHAL           INDIAN               30100        255                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+      1515 CAMARGUE             FRENCH               59100        211                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+      1717 KANKREJ              INDIAN               37100        222                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+      1919 GELBEIV              GERMAN               89100        222                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+
+7 rows selected.
+
+SQL> -- question 11
+SQL> --natural join
+SQL> select anim_id, anim_name, breed, lname, fname, location from animals NATURAL JOIN wakulima;
+
+   ANIM_ID ANIM_NAME            BREED           LNAME                FNAME                LOCATION                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
+---------- -------------------- --------------- -------------------- -------------------- --------------------                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
+      1111 ABONDANCE            FRENCH          EHERA                DLAMINI              ROYSAMBU                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
+      1212 KURGANSKAYA          RUSSIAN         EISENHAUER           KINYAITTI            KAYOLE                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
+      1313 HALLIKAR             INDIAN          GARCIA               MWANGI               MUIGA                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
+      1414 AMRITMAHAL           INDIAN          BAYER                ACHEMBE              THIKA                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
+      1515 CAMARGUE             FRENCH          GARCIA               MWANGI               MUIGA                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
+      1717 KANKREJ              INDIAN          PARIKH               LYSTER               KASARANI                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
+      1919 GELBEIV              GERMAN          PARIKH               LYSTER               KASARANI                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
+
+7 rows selected.
+
+SQL> 
+SQL> --equal join
+SQL> select animals.anim_id, animals.anim_name, animals.breed, wakulima.lname, wakulima.fname, wakulima.location from animals, wakulima where animals.own_id = wakulima.own_id;
+
+   ANIM_ID ANIM_NAME            BREED           LNAME                FNAME                LOCATION                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
+---------- -------------------- --------------- -------------------- -------------------- --------------------                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
+      1111 ABONDANCE            FRENCH          EHERA                DLAMINI              ROYSAMBU                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
+      1212 KURGANSKAYA          RUSSIAN         EISENHAUER           KINYAITTI            KAYOLE                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
+      1313 HALLIKAR             INDIAN          GARCIA               MWANGI               MUIGA                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
+      1414 AMRITMAHAL           INDIAN          BAYER                ACHEMBE              THIKA                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
+      1515 CAMARGUE             FRENCH          GARCIA               MWANGI               MUIGA                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
+      1717 KANKREJ              INDIAN          PARIKH               LYSTER               KASARANI                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
+      1919 GELBEIV              GERMAN          PARIKH               LYSTER               KASARANI                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
+
+7 rows selected.
+
+SQL> 
+SQL> --inner join
+SQL> select animals.anim_id, animals.anim_name, animals.breed, wakulima.lname, wakulima.fname, wakulima.location from animals INNER JOIN wakulima ON animals.own_id = wakulima.own_id;
+
+   ANIM_ID ANIM_NAME            BREED           LNAME                FNAME                LOCATION                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
+---------- -------------------- --------------- -------------------- -------------------- --------------------                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
+      1111 ABONDANCE            FRENCH          EHERA                DLAMINI              ROYSAMBU                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
+      1212 KURGANSKAYA          RUSSIAN         EISENHAUER           KINYAITTI            KAYOLE                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
+      1313 HALLIKAR             INDIAN          GARCIA               MWANGI               MUIGA                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
+      1414 AMRITMAHAL           INDIAN          BAYER                ACHEMBE              THIKA                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
+      1515 CAMARGUE             FRENCH          GARCIA               MWANGI               MUIGA                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
+      1717 KANKREJ              INDIAN          PARIKH               LYSTER               KASARANI                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
+      1919 GELBEIV              GERMAN          PARIKH               LYSTER               KASARANI                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
+
+7 rows selected.
+
+SQL> 
+SQL> --LEFR OUTER
+SQL> select animals.anim_id, animals.anim_name, animals.breed, wakulima.lname, wakulima.fname, wakulima.location from animals LEFT JOIN wakulima ON animals.own_id = wakulima.own_id;
+
+   ANIM_ID ANIM_NAME            BREED           LNAME                FNAME                LOCATION                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
+---------- -------------------- --------------- -------------------- -------------------- --------------------                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
+      1515 CAMARGUE             FRENCH          GARCIA               MWANGI               MUIGA                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
+      1313 HALLIKAR             INDIAN          GARCIA               MWANGI               MUIGA                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
+      1919 GELBEIV              GERMAN          PARIKH               LYSTER               KASARANI                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
+      1717 KANKREJ              INDIAN          PARIKH               LYSTER               KASARANI                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
+      1111 ABONDANCE            FRENCH          EHERA                DLAMINI              ROYSAMBU                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
+      1212 KURGANSKAYA          RUSSIAN         EISENHAUER           KINYAITTI            KAYOLE                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
+      1414 AMRITMAHAL           INDIAN          BAYER                ACHEMBE              THIKA                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
+
+7 rows selected.
+
+SQL> GRANT insert, update, delete on animals to apt1050 with grant option;
+
+Grant succeeded.
+
+SQL> --question 21
+SQL> create or replace view WANYAMA AS select * from animals where price > 60000 WITH CHECK OPTION;
+
+View created.
+
+SQL> SELECT * from WANYAMA;
+
+   ANIM_ID ANIM_NAME            BREED                PRICE     OWN_ID                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+---------- -------------------- --------------- ---------- ----------                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+      1111 ABONDANCE            FRENCH               70100        233                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+      1919 GELBEIV              GERMAN               89100        222                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+
+SQL> CONNECT apt1050
+Connected.
+SQL> select * user_tab_privs;
+select * user_tab_privs
+         *
+ERROR at line 1:
+ORA-00923: FROM keyword not found where expected 
+
+
+SQL> select * from user_tab_privs;
+
+GRANTEE                        OWNER                          TABLE_NAME                     GRANTOR                        PRIVILEGE                                GRA HIE                                                                                                                                                                                                                                                                                                                                                                                                                                            
+------------------------------ ------------------------------ ------------------------------ ------------------------------ ---------------------------------------- --- ---                                                                                                                                                                                                                                                                                                                                                                                                                                            
+APT1050                        AUSTIN                         ANIMALS                        AUSTIN                         DELETE                                   YES NO                                                                                                                                                                                                                                                                                                                                                                                                                                             
+APT1050                        AUSTIN                         ANIMALS                        AUSTIN                         UPDATE                                   YES NO                                                                                                                                                                                                                                                                                                                                                                                                                                             
+APT1050                        AUSTIN                         ANIMALS                        AUSTIN                         INSERT                                   YES NO                                                                                                                                                                                                                                                                                                                                                                                                                                             
+APT1050                        AUSTIN                         EMPLOYEES                      AUSTIN                         SELECT                                   NO  NO                                                                                                                                                                                                                                                                                                                                                                                                                                             
+
+SQL> commit;
+
+Commit complete.
+
+SQL> exit;

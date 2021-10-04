@@ -1,0 +1,328 @@
+SQL> spool
+currently spooling to c:\users\austin\desktop\sequel2.txt
+SQL> connect austin
+Connected.
+SQL> create table parts(
+  2  part_no integer primary key,
+  3  description varchar2(20),
+  4  shop varchar2(20),
+  5  price number(8,2));
+
+Table created.
+
+SQL> insert into parts values ('&part_no', '&description', '&shop','&shop');
+Enter value for part_no: 54
+Enter value for description: PEDALS
+Enter value for shop: JACKS BIKE
+Enter value for shop: 54.25
+old   1: insert into parts values ('&part_no', '&description', '&shop','&shop')
+new   1: insert into parts values ('54', 'PEDALS', 'JACKS BIKE','54.25')
+
+1 row created.
+
+SQL> /
+Enter value for part_no: 42
+Enter value for description: SEATS
+Enter value for shop: TRUE WHEEL
+Enter value for shop: 24.50
+old   1: insert into parts values ('&part_no', '&description', '&shop','&shop')
+new   1: insert into parts values ('42', 'SEATS', 'TRUE WHEEL','24.50')
+
+1 row created.
+
+SQL> /
+Enter value for part_no: 46
+Enter value for description: TIRES
+Enter value for shop: TRUE WHEEL
+Enter value for shop: 15.25
+old   1: insert into parts values ('&part_no', '&description', '&shop','&shop')
+new   1: insert into parts values ('46', 'TIRES', 'TRUE WHEEL','15.25')
+
+1 row created.
+
+SQL> /
+Enter value for part_no: 23
+Enter value for description: MOUNTAIN BIKE
+Enter value for shop: JACKS BIKE
+Enter value for shop: 350.45
+old   1: insert into parts values ('&part_no', '&description', '&shop','&shop')
+new   1: insert into parts values ('23', 'MOUNTAIN BIKE', 'JACKS BIKE','350.45')
+
+1 row created.
+
+SQL> /
+Enter value for part_no: 76
+Enter value for description: ROAD BIKE
+Enter value for shop: LE SHOPPE
+Enter value for shop: 530.00
+old   1: insert into parts values ('&part_no', '&description', '&shop','&shop')
+new   1: insert into parts values ('76', 'ROAD BIKE', 'LE SHOPPE','530.00')
+
+1 row created.
+
+SQL> /
+Enter value for part_no: 10
+Enter value for description: TANDEM
+Enter value for shop: BIKE SPEC
+Enter value for shop: 1200.00
+old   1: insert into parts values ('&part_no', '&description', '&shop','&shop')
+new   1: insert into parts values ('10', 'TANDEM', 'BIKE SPEC','1200.00')
+
+1 row created.
+
+SQL> select * from parts;
+
+   PART_NO DESCRIPTION          SHOP                      PRICE                 
+---------- -------------------- -------------------- ----------                 
+        54 PEDALS               JACKS BIKE                54.25                 
+        42 SEATS                TRUE WHEEL                 24.5                 
+        46 TIRES                TRUE WHEEL                15.25                 
+        23 MOUNTAIN BIKE        JACKS BIKE               350.45                 
+        76 ROAD BIKE            LE SHOPPE                   530                 
+        10 TANDEM               BIKE SPEC                  1200                 
+
+6 rows selected.
+
+SQL> -- items starting with letter T
+SQL> select * from parts where description like 'T%';
+
+   PART_NO DESCRIPTION          SHOP                      PRICE                 
+---------- -------------------- -------------------- ----------                 
+        46 TIRES                TRUE WHEEL                15.25                 
+        10 TANDEM               BIKE SPEC                  1200                 
+
+SQL> --has A as the 3rd character
+SQL> select * from parts where description like '__A%';
+
+   PART_NO DESCRIPTION          SHOP                      PRICE                 
+---------- -------------------- -------------------- ----------                 
+        42 SEATS                TRUE WHEEL                 24.5                 
+        76 ROAD BIKE            LE SHOPPE                   530                 
+
+SQL> select * from parts where description like 'T%' and shop like 'T%';
+
+   PART_NO DESCRIPTION          SHOP                      PRICE                 
+---------- -------------------- -------------------- ----------                 
+        46 TIRES                TRUE WHEEL                15.25                 
+
+SQL> select * from parts where description like 'T%' or shop like 'T%';
+
+   PART_NO DESCRIPTION          SHOP                      PRICE                 
+---------- -------------------- -------------------- ----------                 
+        42 SEATS                TRUE WHEEL                 24.5                 
+        46 TIRES                TRUE WHEEL                15.25                 
+        10 TANDEM               BIKE SPEC                  1200                 
+
+SQL> --mean
+
+SQL> select avg(price) from parts;
+
+AVG(PRICE)                                                                      
+----------                                                                      
+362.408333                                                                      
+
+SQL> select max(price) from parts;
+
+MAX(PRICE)                                                                      
+----------                                                                      
+      1200                                                                      
+
+SQL> select min(price) from parts;
+
+MIN(PRICE)                                                                      
+----------                                                                      
+     15.25                                                                      
+
+SQL> --items whose price is less than 500 and description starts with p
+SQL> select * from parts where description like 'P%' and price<500 ;
+
+   PART_NO DESCRIPTION          SHOP                      PRICE                 
+---------- -------------------- -------------------- ----------                 
+        54 PEDALS               JACKS BIKE                54.25                 
+
+SQL> select * from parts where price between 300 and 1200;
+
+   PART_NO DESCRIPTION          SHOP                      PRICE                 
+---------- -------------------- -------------------- ----------                 
+        23 MOUNTAIN BIKE        JACKS BIKE               350.45                 
+        76 ROAD BIKE            LE SHOPPE                   530                 
+        10 TANDEM               BIKE SPEC                  1200                 
+
+SQL> --increase prices by 105
+
+SQL> update parts
+  2  set price = price + 105;
+
+6 rows updated.
+
+SQL> select * from parts;
+
+   PART_NO DESCRIPTION          SHOP                      PRICE                 
+---------- -------------------- -------------------- ----------                 
+        54 PEDALS               JACKS BIKE               159.25                 
+        42 SEATS                TRUE WHEEL                129.5                 
+        46 TIRES                TRUE WHEEL               120.25                 
+        23 MOUNTAIN BIKE        JACKS BIKE               455.45                 
+        76 ROAD BIKE            LE SHOPPE                   635                 
+        10 TANDEM               BIKE SPEC                  1305                 
+
+6 rows selected.
+
+SQL> select count (*) from parts;
+
+  COUNT(*)                                                                      
+----------                                                                      
+         6                                                                      
+
+SQL> select part_no, description, shop superDuka, price from parts;
+
+   PART_NO DESCRIPTION          SUPERDUKA                 PRICE                 
+---------- -------------------- -------------------- ----------                 
+        54 PEDALS               JACKS BIKE               159.25                 
+        42 SEATS                TRUE WHEEL                129.5                 
+        46 TIRES                TRUE WHEEL               120.25                 
+        23 MOUNTAIN BIKE        JACKS BIKE               455.45                 
+        76 ROAD BIKE            LE SHOPPE                   635                 
+        10 TANDEM               BIKE SPEC                  1305                 
+
+6 rows selected.
+
+SQL> select shop,
+  2  count(part_no),
+  3  sum(price)
+  4  from parts
+  5  group by shop
+  6  order by shop;
+
+SHOP                 COUNT(PART_NO) SUM(PRICE)                                  
+-------------------- -------------- ----------                                  
+BIKE SPEC                         1       1305                                  
+JACKS BIKE                        2      614.7                                  
+LE SHOPPE                         1        635                                  
+TRUE WHEEL                        2     249.75                                  
+
+SQL> select * from parts;
+
+   PART_NO DESCRIPTION          SHOP                      PRICE                 
+---------- -------------------- -------------------- ----------                 
+        54 PEDALS               JACKS BIKE               159.25                 
+        42 SEATS                TRUE WHEEL                129.5                 
+        46 TIRES                TRUE WHEEL               120.25                 
+        23 MOUNTAIN BIKE        JACKS BIKE               455.45                 
+        76 ROAD BIKE            LE SHOPPE                   635                 
+        10 TANDEM               BIKE SPEC                  1305                 
+
+6 rows selected.
+
+SQL> select * from parts
+  2  order by price;
+
+   PART_NO DESCRIPTION          SHOP                      PRICE                 
+---------- -------------------- -------------------- ----------                 
+        46 TIRES                TRUE WHEEL               120.25                 
+        42 SEATS                TRUE WHEEL                129.5                 
+        54 PEDALS               JACKS BIKE               159.25                 
+        23 MOUNTAIN BIKE        JACKS BIKE               455.45                 
+        76 ROAD BIKE            LE SHOPPE                   635                 
+        10 TANDEM               BIKE SPEC                  1305                 
+
+6 rows selected.
+
+SQL> select * from parts
+  2  order by price desc;
+
+   PART_NO DESCRIPTION          SHOP                      PRICE                 
+---------- -------------------- -------------------- ----------                 
+        10 TANDEM               BIKE SPEC                  1305                 
+        76 ROAD BIKE            LE SHOPPE                   635                 
+        23 MOUNTAIN BIKE        JACKS BIKE               455.45                 
+        54 PEDALS               JACKS BIKE               159.25                 
+        42 SEATS                TRUE WHEEL                129.5                 
+        46 TIRES                TRUE WHEEL               120.25                 
+
+6 rows selected.
+
+SQL> select * from parts where (shop='JACKS BIKE');
+
+   PART_NO DESCRIPTION          SHOP                      PRICE                 
+---------- -------------------- -------------------- ----------                 
+        54 PEDALS               JACKS BIKE               159.25                 
+        23 MOUNTAIN BIKE        JACKS BIKE               455.45                 
+
+SQL> select * from parts where not(shop='JACKS BIKE');
+
+   PART_NO DESCRIPTION          SHOP                      PRICE                 
+---------- -------------------- -------------------- ----------                 
+        42 SEATS                TRUE WHEEL                129.5                 
+        46 TIRES                TRUE WHEEL               120.25                 
+        76 ROAD BIKE            LE SHOPPE                   635                 
+        10 TANDEM               BIKE SPEC                  1305                 
+
+SQL> update parts
+  2  set price=price+5
+  3  where part_no=23;
+
+1 row updated.
+
+SQL> update parts
+  2  set description='Brakes'
+  3  where part_no=23;
+
+1 row updated.
+
+SQL> select * from parts;
+
+   PART_NO DESCRIPTION          SHOP                      PRICE                 
+---------- -------------------- -------------------- ----------                 
+        54 PEDALS               JACKS BIKE               159.25                 
+        42 SEATS                TRUE WHEEL                129.5                 
+        46 TIRES                TRUE WHEEL               120.25                 
+        23 Brakes               JACKS BIKE               460.45                 
+        76 ROAD BIKE            LE SHOPPE                   635                 
+        10 TANDEM               BIKE SPEC                  1305                 
+
+6 rows selected.
+
+SQL> delete from parts where part_no=23;
+
+1 row deleted.
+
+SQL> select * from parts;
+
+   PART_NO DESCRIPTION          SHOP                      PRICE                 
+---------- -------------------- -------------------- ----------                 
+        54 PEDALS               JACKS BIKE               159.25                 
+        42 SEATS                TRUE WHEEL                129.5                 
+        46 TIRES                TRUE WHEEL               120.25                 
+        76 ROAD BIKE            LE SHOPPE                   635                 
+        10 TANDEM               BIKE SPEC                  1305                 
+
+SQL> rollback;
+
+Rollback complete.
+
+SQL> Select * from parts;
+
+no rows selected
+
+SQL> rollback;
+
+Rollback complete.
+
+SQL> Select * from parts;
+
+no rows selected
+
+SQL> rollback;
+
+Rollback complete.
+
+SQL> Select * from parts;
+
+no rows selected
+
+SQL> commit;
+
+Commit complete.
+
+SQL> exit;

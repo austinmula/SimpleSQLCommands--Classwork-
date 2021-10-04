@@ -1,0 +1,512 @@
+SQL> spool
+currently spooling to c:\users\austin\desktop\project.txt
+SQL> connect austin
+Connected.
+SQL> create table openings(
+  2  open_id int primary key,
+  3  qual_req varchar2(30),
+  4  st_date date,
+  5  end_date date,
+  6  hourlypay number (8,2));
+
+Table created.
+
+SQL> create table company(
+  2  company_id int primary key,
+  3  company_name varchar2(20),
+  4  open_id references openings);
+
+Table created.
+
+SQL> create sequence opening_seq
+  2  start with 1360
+  3  increment by 10;
+
+Sequence created.
+
+SQL> insert into openings values (opening_seq.nextval, 'C++ programming', '13-Aug-2007','20-Jul-2010', 5500.50);
+
+1 row created.
+
+SQL> insert into openings values (opening_seq.nextval, 'VB programming', '13-Aug-2017','20-Dec-2017', 4500.00);
+
+1 row created.
+
+SQL> insert into openings values (opening_seq.nextval, 'Oracle DBA Certification', '3-Jan-2019','29-Dec-2020', 7500.00);
+
+1 row created.
+
+SQL> insert into openings values (opening_seq.nextval, 'HTML, CSS Programming', '1-Jan-2020','31-Jan-2020', 3500.00);
+
+1 row created.
+
+SQL> select * from openings;
+
+   OPEN_ID QUAL_REQ                       ST_DATE   END_DATE   HOURLYPAY        
+---------- ------------------------------ --------- --------- ----------        
+      1360 C++ programming                13-AUG-07 20-JUL-10     5500.5        
+      1370 VB programming                 13-AUG-17 20-DEC-17       4500        
+      1380 Oracle DBA Certification       03-JAN-19 29-DEC-20       7500        
+      1390 HTML, CSS Programming          01-JAN-20 31-JAN-20       3500        
+
+SQL> insert into company values ('7590', 'Shoppify', 1380)
+  2  ;
+
+1 row created.
+
+SQL> insert into company values ('3451', 'Rock Nation', 1390);
+
+1 row created.
+
+SQL> insert into company values ('2390', 'Def jam', 1390);
+
+1 row created.
+
+SQL> select * from company;
+
+COMPANY_ID COMPANY_NAME            OPEN_ID                                      
+---------- -------------------- ----------                                      
+      7590 Shoppify                   1380                                      
+      3451 Rock Nation                1390                                      
+      2390 Def jam                    1390                                      
+
+SQL> create table candidates(
+  2  cand_id number(5) primary key,
+  3  lname varchar2(20) NOT NULL,
+  4  fname varchar2(20) NOT NULL);
+
+Table created.
+
+SQL> create table qualifications(
+  2  qual_code varchar2(20) primary key,
+  3  qual_desc varchar2(40),
+  4  cand_id references candidates);
+
+Table created.
+
+SQL> insert into candidates values (110, 'Khalid','Sheikh');
+
+1 row created.
+
+SQL> insert into candidates values (112, 'Salva','David');
+
+1 row created.
+
+SQL> insert into candidates values (113, 'Walker','Jonathan');
+
+1 row created.
+
+SQL> insert into candidates values (114, 'Wayne','Martha');
+
+1 row created.
+
+SQL> select * from candidates;
+
+   CAND_ID LNAME                FNAME                                           
+---------- -------------------- --------------------                            
+       110 Khalid               Sheikh                                          
+       112 Salva                David                                           
+       113 Walker               Jonathan                                        
+       114 Wayne                Martha                                          
+
+SQL> insert into qualifications values ('PRG-VB', 'Programmer Visual basic', 113);
+
+1 row created.
+
+SQL> insert into qualifications values ('PRG-C++', 'Programmer C++', 113);
+
+1 row created.
+
+SQL> insert into qualifications values ('SEC-60', 'Secretary, 60 words per minute', 114);
+
+1 row created.
+
+SQL> insert into qualifications values ('DBA-ORA', 'Database Administrator Oracle', 110);
+
+1 row created.
+
+SQL> select * from qualifications;
+
+QUAL_CODE            QUAL_DESC                                   CAND_ID        
+-------------------- ---------------------------------------- ----------        
+PRG-VB               Programmer Visual basic                         113        
+PRG-C++              Programmer C++                                  113        
+SEC-60               Secretary, 60 words per minute                  114        
+DBA-ORA              Database Administrator Oracle                   110        
+
+SQL> insert into qualifications values ('WD-CF', 'Web Developer Cold Fussion', 112);
+
+1 row created.
+
+SQL> select * from qualifications;
+
+QUAL_CODE            QUAL_DESC                                   CAND_ID        
+-------------------- ---------------------------------------- ----------        
+PRG-VB               Programmer Visual basic                         113        
+PRG-C++              Programmer C++                                  113        
+SEC-60               Secretary, 60 words per minute                  114        
+DBA-ORA              Database Administrator Oracle                   110        
+WD-CF                Web Developer Cold Fussion                      112        
+
+SQL> create table placement(
+  2  open_id references openings,
+  3  cand_id references candidates,
+  4  hours_worked int,
+  5  primary key (open_id, cand_id));
+
+Table created.
+
+SQL> drop table placement;
+
+Table dropped.
+
+SQL> create table placement(
+  2  open_id references openings,
+  3  cand_id references candidates,
+  4  hours_worked int,
+  5  cand_name varchar2(20),
+  6  company_name varchar2(20),
+  7  primary key (open_id, cand_id));
+
+Table created.
+
+SQL> insert into placement values (1380, 110 , 190, 'Khalid', 'Shoppify');
+
+1 row created.
+
+SQL> insert into placement values (1390, 112 , 80, 'Salva', 'Rock Nation');
+
+1 row created.
+
+SQL> select * from placement;
+
+   OPEN_ID    CAND_ID HOURS_WORKED CAND_NAME            COMPANY_NAME            
+---------- ---------- ------------ -------------------- --------------------    
+      1380        110          190 Khalid               Shoppify                
+      1390        112           80 Salva                Rock Nation             
+
+SQL> create table course(
+  2  course_code varchar2(20) primary key,
+  3  course_name varchar2(20),
+  4  preq_code varchar2(20));
+
+Table created.
+
+SQL> insert into course values('SEC-60','Secretarial work','SEC-45');
+
+1 row created.
+
+SQL> insert into course values('SYS-2','Systems analysis 1','SYS-1');
+
+1 row created.
+
+SQL> insert into course values('NW-NOV','Network Admin Novel','SEC-45');
+
+1 row created.
+
+SQL> delete from course where course_code='SYS-2';
+
+1 row deleted.
+
+SQL> delete from course where course_code='NW-NOV';
+
+1 row deleted.
+
+SQL> insert into course values('NW-NOV','Network Admin Novel','NONE');
+
+1 row created.
+
+SQL> insert into course values('SYS-2','Systems analysis 2','SYS-1');
+
+1 row created.
+
+SQL> SELECT * FROM course;
+
+COURSE_CODE          COURSE_NAME          PREQ_CODE                             
+-------------------- -------------------- --------------------                  
+SEC-60               Secretarial work     SEC-45                                
+NW-NOV               Network Admin Novel  NONE                                  
+SYS-2                Systems analysis 2   SYS-1                                 
+
+SQL> create table training(
+  2  session_id varchar2(10) primary key,
+  3  course_code references course,
+  4  course_name varchar2(30),
+  5  fee number(8,2));
+
+Table created.
+
+SQL> insert into training values( 'CLSS A1', 'SEC-60' , 'Secretarial Work', 20000.00);
+
+1 row created.
+
+SQL> insert into training values( 'CLSS B1', 'NW-NOV' , 'Network Administaration Novel', 28750.00);
+
+1 row created.
+
+SQL> insert into training values( 'CLSS C1', 'SYS-2' , 'System Analyst level 2', 48500.00);
+
+1 row created.
+
+SQL> select * from training;
+
+SESSION_ID COURSE_CODE          COURSE_NAME                           FEE       
+---------- -------------------- ------------------------------ ----------       
+CLSS A1    SEC-60               Secretarial Work                    20000       
+CLSS B1    NW-NOV               Network Administaration Novel       28750       
+CLSS C1    SYS-2                System Analyst level 2              48500       
+
+SQL> 
+SQL> 
+SQL> -- list of all the tables
+SQL> select * from openings;
+
+   OPEN_ID QUAL_REQ                       ST_DATE   END_DATE   HOURLYPAY        
+---------- ------------------------------ --------- --------- ----------        
+      1360 C++ programming                13-AUG-07 20-JUL-10     5500.5        
+      1370 VB programming                 13-AUG-17 20-DEC-17       4500        
+      1380 Oracle DBA Certification       03-JAN-19 29-DEC-20       7500        
+      1390 HTML, CSS Programming          01-JAN-20 31-JAN-20       3500        
+
+SQL> select * from company;
+
+COMPANY_ID COMPANY_NAME            OPEN_ID                                      
+---------- -------------------- ----------                                      
+      7590 Shoppify                   1380                                      
+      3451 Rock Nation                1390                                      
+      2390 Def jam                    1390                                      
+
+SQL> select * from candidates;
+
+   CAND_ID LNAME                FNAME                                           
+---------- -------------------- --------------------                            
+       110 Khalid               Sheikh                                          
+       112 Salva                David                                           
+       113 Walker               Jonathan                                        
+       114 Wayne                Martha                                          
+
+SQL> select * from qualifications;
+
+QUAL_CODE            QUAL_DESC                                   CAND_ID        
+-------------------- ---------------------------------------- ----------        
+PRG-VB               Programmer Visual basic                         113        
+PRG-C++              Programmer C++                                  113        
+SEC-60               Secretary, 60 words per minute                  114        
+DBA-ORA              Database Administrator Oracle                   110        
+WD-CF                Web Developer Cold Fussion                      112        
+
+SQL> select * from placement;
+
+   OPEN_ID    CAND_ID HOURS_WORKED CAND_NAME            COMPANY_NAME            
+---------- ---------- ------------ -------------------- --------------------    
+      1380        110          190 Khalid               Shoppify                
+      1390        112           80 Salva                Rock Nation             
+
+SQL> select * from course;
+
+COURSE_CODE          COURSE_NAME          PREQ_CODE                             
+-------------------- -------------------- --------------------                  
+SEC-60               Secretarial work     SEC-45                                
+NW-NOV               Network Admin Novel  NONE                                  
+SYS-2                Systems analysis 2   SYS-1                                 
+
+SQL> select * from training;
+
+SESSION_ID COURSE_CODE          COURSE_NAME                           FEE       
+---------- -------------------- ------------------------------ ----------       
+CLSS A1    SEC-60               Secretarial Work                    20000       
+CLSS B1    NW-NOV               Network Administaration Novel       28750       
+CLSS C1    SYS-2                System Analyst level 2              48500       
+
+SQL> commit;
+
+Commit complete.
+
+SQL> -- PART C
+SQL> -- CREATE TWO VIEWS
+SQL> create or replace view HIGHPAY AS select * from openings where hourlypay>5000;
+
+View created.
+
+SQL> select * from HIGHPAY;
+
+   OPEN_ID QUAL_REQ                       ST_DATE   END_DATE   HOURLYPAY        
+---------- ------------------------------ --------- --------- ----------        
+      1360 C++ programming                13-AUG-07 20-JUL-10     5500.5        
+      1380 Oracle DBA Certification       03-JAN-19 29-DEC-20       7500        
+
+SQL> --second view
+
+SQL> create or replace view EASYCOURSES as select * from course where preq_code='NONE';
+
+View created.
+
+SQL> SELECT * from EASYCOURSES;
+
+COURSE_CODE          COURSE_NAME          PREQ_CODE                             
+-------------------- -------------------- --------------------                  
+NW-NOV               Network Admin Novel  NONE                                  
+
+SQL> --CREATE TWO PROCEDURES
+SQL> --PROCEDURE TO INCREASE HOURLY PAY
+SQL> CREATE or replace procedure UPDATEPAY
+  2  AS
+  3  BEGIN
+  4  update openings set hourlypay= hourlypay+550;
+  5  end;
+  6  /
+
+Procedure created.
+
+SQL> exec UPDATEPAY;
+
+PL/SQL procedure successfully completed.
+
+SQL> SELECT * FROM OPENINGS;
+
+   OPEN_ID QUAL_REQ                       ST_DATE   END_DATE   HOURLYPAY        
+---------- ------------------------------ --------- --------- ----------        
+      1360 C++ programming                13-AUG-07 20-JUL-10     6050.5        
+      1370 VB programming                 13-AUG-17 20-DEC-17       5050        
+      1380 Oracle DBA Certification       03-JAN-19 29-DEC-20       8050        
+      1390 HTML, CSS Programming          01-JAN-20 31-JAN-20       4050        
+
+SQL> -- PROCEDURE 2
+SQL> CREATE or replace procedure NEWFEES
+  2  AS
+  3  BEGIN
+  4  update training set fee= fee-100;
+  5  end;
+  6  /
+
+Procedure created.
+
+SQL> exec NEWFEES;
+
+PL/SQL procedure successfully completed.
+
+SQL> select * from training;
+
+SESSION_ID COURSE_CODE          COURSE_NAME                           FEE       
+---------- -------------------- ------------------------------ ----------       
+CLSS A1    SEC-60               Secretarial Work                    19900       
+CLSS B1    NW-NOV               Network Administaration Novel       28650       
+CLSS C1    SYS-2                System Analyst level 2              48400       
+
+SQL> -- create 2 synonyms
+
+SQL> create synonym org for company;
+
+Synonym created.
+
+SQL> create synonym class for training;
+
+Synonym created.
+
+SQL> -- create two triggers
+SQL> create or replace trigger CHECKFEE
+  2  after insert or update of fee on training
+  3  for each row
+  4  begin
+  5  if (:new.fee>80000) then
+  6  RAISE_APPLICATION_ERROR (-20030, 'fee is too high');
+  7  end if;
+  8  end;
+  9  /
+
+Trigger created.
+
+SQL> -- second trigger
+SQL> create or replace trigger CHECKPAY
+  2  after insert or update of hourlypay on openings
+  3  for each row
+  4  begin
+  5  if (:new.fee<0) then
+  6  RAISE_APPLICATION_ERROR (-20030, 'salary cannot be less than zero');
+  7  end if;
+  8  end;
+  9  /
+
+Warning: Trigger created with compilation errors.
+
+SQL> create or replace trigger CHECKPAY
+  2  after insert or update of hourlypay on openings
+  3  for each row
+  4  begin
+  5  if (:new.hourlypay<0) then
+  6  RAISE_APPLICATION_ERROR (-20030, 'salary cannot be less than zero');
+  7  end if;
+  8  end;
+  9  /
+
+Trigger created.
+
+SQL> -- index for my tables
+SQL> create index idx_names
+  2  ON candidates (fname, lname);
+
+Index created.
+
+SQL> --create user view and give privilegdes
+SQL> connect system
+Connected.
+SQL> show user;
+USER is "SYSTEM"
+SQL> create user newuser1 identified by abc;
+
+User created.
+
+SQL> grant connect, resource to newuser1;
+
+Grant succeeded.
+
+SQL> connect austin;
+Connected.
+SQL> grant select, insert, update on placement to newuser1 with grant option;
+
+Grant succeeded.
+
+SQL> connect newuser1
+Connected.
+SQL> select * from user_tab_privs;
+
+GRANTEE                        OWNER                                            
+------------------------------ ------------------------------                   
+TABLE_NAME                     GRANTOR                                          
+------------------------------ ------------------------------                   
+PRIVILEGE                                GRA HIE                                
+---------------------------------------- --- ---                                
+NEWUSER1                       AUSTIN                                           
+PLACEMENT                      AUSTIN                                           
+UPDATE                                   YES NO                                 
+                                                                                
+NEWUSER1                       AUSTIN                                           
+PLACEMENT                      AUSTIN                                           
+SELECT                                   YES NO                                 
+
+GRANTEE                        OWNER                                            
+------------------------------ ------------------------------                   
+TABLE_NAME                     GRANTOR                                          
+------------------------------ ------------------------------                   
+PRIVILEGE                                GRA HIE                                
+---------------------------------------- --- ---                                
+                                                                                
+NEWUSER1                       AUSTIN                                           
+PLACEMENT                      AUSTIN                                           
+INSERT                                   YES NO                                 
+                                                                                
+
+SQL> set linesize 600;
+SQL> select * from user_tab_privs;
+
+GRANTEE                        OWNER                          TABLE_NAME                     GRANTOR                        PRIVILEGE                                GRA HIE                                                                                                                                                                                                                                                                                                                                                                                                                                            
+------------------------------ ------------------------------ ------------------------------ ------------------------------ ---------------------------------------- --- ---                                                                                                                                                                                                                                                                                                                                                                                                                                            
+NEWUSER1                       AUSTIN                         PLACEMENT                      AUSTIN                         UPDATE                                   YES NO                                                                                                                                                                                                                                                                                                                                                                                                                                             
+NEWUSER1                       AUSTIN                         PLACEMENT                      AUSTIN                         SELECT                                   YES NO                                                                                                                                                                                                                                                                                                                                                                                                                                             
+NEWUSER1                       AUSTIN                         PLACEMENT                      AUSTIN                         INSERT                                   YES NO                                                                                                                                                                                                                                                                                                                                                                                                                                             
+
+SQL> commit;
+
+Commit complete.
+
+SQL> exit;

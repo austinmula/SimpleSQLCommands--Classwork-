@@ -1,0 +1,183 @@
+SQL> spool
+currently spooling to c:\users\austin\desktop\classAssign4.txt
+SQL> connect austin
+Connected.
+SQL> show user;
+USER is "AUSTIN"                                                                                                                   
+
+
+SQL> create or replace type employee_ty as OBJECT(
+  2  emp_num integer,
+  3  emp_name varchar2(20),
+  4  emp_address varchar2(20)) NOT FINAL;
+  5  /
+
+Type created.
+
+SQL> desc employee_ty;
+ employee_ty is NOT FINAL
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ EMP_NUM                                            NUMBER(38)
+ EMP_NAME                                           VARCHAR2(20)
+ EMP_ADDRESS                                        VARCHAR2(20)
+
+SQL> savepoint save1;
+
+Savepoint created.
+
+SQL> create or replace type mechanic_ty UNDER employee_ty(
+  2  mechanic_type varchar2(25));
+  3  /
+
+Type created.
+
+SQL> desc mechanic_ty;
+ mechanic_ty extends AUSTIN.EMPLOYEE_TY
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ EMP_NUM                                            NUMBER(38)
+ EMP_NAME                                           VARCHAR2(20)
+ EMP_ADDRESS                                        VARCHAR2(20)
+ MECHANIC_TYPE                                      VARCHAR2(25)
+
+SQL> create table mechanic of mechanic_ty(primary key(emp_num));
+
+Table created.
+
+SQL> desc mechanic;
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ EMP_NUM                                   NOT NULL NUMBER(38)
+ EMP_NAME                                           VARCHAR2(20)
+ EMP_ADDRESS                                        VARCHAR2(20)
+ MECHANIC_TYPE                                      VARCHAR2(25)
+
+SQL> insert into mechanic values(1000, 'Mark', '340-1 Line', 'Engine Maintenance')
+  2  ;
+
+1 row created.
+
+SQL> insert into mechanic values(1001, 'Joe', '350-1 Lane', 'AirFrame Maintenance');
+
+1 row created.
+
+SQL> insert into mechanic values(1002, 'Linda', '120-1 Avenue', 'Avionics Maintenance');
+
+1 row created.
+
+SQL> insert into mechanic values(1003, 'Leo', '123-1 Ave', 'Engine Maintenance');
+
+1 row created.
+
+SQL> set linesize 700;
+SQL> select * from mechanic;
+
+   EMP_NUM EMP_NAME             EMP_ADDRESS          MECHANIC_TYPE                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
+---------- -------------------- -------------------- -------------------------                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
+      1000 Mark                 340-1 Line           Engine Maintenance                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
+      1001 Joe                  350-1 Lane           AirFrame Maintenance                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+      1002 Linda                120-1 Avenue         Avionics Maintenance                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+      1003 Leo                  123-1 Ave            Engine Maintenance                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
+
+SQL> savepoint save3;
+
+Savepoint created.
+
+SQL> create or replace type department_ty as OBJECT(
+  2  dept_num integer,
+  3  dept_name varchar2(30),
+  4  mailbox_num varchar2(20),
+  5  office_tel varchar2(20)) NOT FINAL;
+  6  /
+
+Type created.
+
+SQL> desc department_ty;
+ department_ty is NOT FINAL
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ DEPT_NUM                                           NUMBER(38)
+ DEPT_NAME                                          VARCHAR2(30)
+ MAILBOX_NUM                                        VARCHAR2(20)
+ OFFICE_TEL                                         VARCHAR2(2)
+
+SQL> create table departments of department_ty (primary key(dept_num));
+
+Table created.
+
+SQL> insert into departments values(100, 'F5M maintenance Department' , '6503', '0708892342');
+
+1 row created.
+
+SQL> insert into departments values(110, 'Aviation Department' , '9004', '0709742342');
+
+1 row created.
+
+SQL> insert into departments values(120, 'Engineering Department' , '5404', '0707432612');
+
+1 row created.
+
+SQL> select * from departments;
+
+  DEPT_NUM DEPT_NAME                      MAILBOX_NUM          OFFICE_TEL                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+---------- ------------------------------ -------------------- --------------------                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
+       100 F5M maintenance Department     6503                 0708892342                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+       110 Aviation Department            9004                 0709742342                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+       120 Engineering Department         5404                 0707432612                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+
+SQL> savepoint save4;
+
+Savepoint created.
+
+SQL> create table courses(
+  2  emp_id references mechanic,
+  3  course_type varchar2(20),
+  4  course_date date,
+  5  certification char(10),
+  6  performance varchar2(20));
+
+Table created.
+
+SQL> insert into courses values(1001, 'FLIGHT SAFETY', '12-dec-2015', 'Yes', 'Pass');
+
+1 row created.
+
+SQL> insert into courses values(1001, 'WORKPLACE PROCEDURES', '22-Feb-2018', 'Yes', 'Honors');
+
+1 row created.
+
+SQL> insert into courses values(1000, 'Perl programming', '14-Jan-2019', 'No', 'Fail');
+
+1 row created.
+
+SQL> select * from courses;
+
+    EMP_ID COURSE_TYPE          COURSE_DA CERTIFICAT PERFORMANCE                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
+---------- -------------------- --------- ---------- --------------------                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+      1001 FLIGHT SAFETY        12-DEC-15 Yes        Pass                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+      1001 WORKPLACE PROCEDURES 22-FEB-18 Yes        Honors                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
+      1000 Perl programming     14-JAN-19 No         Fail                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+
+SQL> select * from mechanic;
+
+   EMP_NUM EMP_NAME             EMP_ADDRESS          MECHANIC_TYPE                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
+---------- -------------------- -------------------- -------------------------                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
+      1000 Mark                 340-1 Line           Engine Maintenance                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
+      1001 Joe                  350-1 Lane           AirFrame Maintenance                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+      1002 Linda                120-1 Avenue         Avionics Maintenance                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+      1003 Leo                  123-1 Ave            Engine Maintenance                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
+
+SQL> select * from departments;
+
+  DEPT_NUM DEPT_NAME                      MAILBOX_NUM          OFFICE_TEL                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+---------- ------------------------------ -------------------- --------------------                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
+       100 F5M maintenance Department     6503                 0708892342                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+       110 Aviation Department            9004                 0709742342                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+       120 Engineering Department         5404                 0707432612                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+
+SQL> commit;
+
+Commit complete.
+
+SQL> exit;

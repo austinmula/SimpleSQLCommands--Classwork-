@@ -1,0 +1,126 @@
+SQL> spool
+currently spooling to c:\users\austin\desktop\classactivity3.txt
+
+SQL> connect austin
+Connected.
+SQL> create table normbuilding(
+  2  BLDG_CODE char(10) primary key,
+  3  BLDG_NAME char(15),
+  4  BLDG_MANAGER varchar2(30));
+
+Table created.
+
+SQL> create table normitems(
+  2  ITEM_ID char(20),
+  3  ITEM_LABEL varchar2(20));
+
+Table created.
+
+SQL> alter table normitems
+  2  add constraint items_pk primary key (ITEM_ID);
+
+Table altered.
+
+SQL> create table normrooms(
+  2  BLDG_CODE references normbuilding,
+  3  ITEM_ID references normitems,
+  4  ROOM_NUM integer,
+  5  primary key(BLDG_CODE, ITEM_ID));
+
+Table created.
+
+SQL> DESC NORMROOMS;
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ BLDG_CODE                                 NOT NULL CHAR(10)
+ ITEM_ID                                   NOT NULL CHAR(20)
+ ROOM_NUM                                           NUMBER(38)
+
+SQL> DESC NORMITEMS;
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ ITEM_ID                                   NOT NULL CHAR(20)
+ ITEM_LABEL                                         VARCHAR2(20)
+
+SQL> DESC NORMBUILDING;
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ BLDG_CODE                                 NOT NULL CHAR(10)
+ BLDG_NAME                                          CHAR(15)
+ BLDG_MANAGER                                       VARCHAR2(30)
+
+SQL> INSERT INTO normbuilding values ('NTC', 'Nottoclear','I.B.Rightonit');
+
+1 row created.
+
+SQL> INSERT INTO normbuilding values ('CSF', 'Canseefar','May B. Next');
+
+1 row created.
+
+SQL> select * from normbuilding;
+
+BLDG_CODE  BLDG_NAME       BLDG_MANAGER                                         
+---------- --------------- ------------------------------                       
+NTC        Nottoclear      I.B.Rightonit                                        
+CSF        Canseefar       May B. Next                                          
+
+SQL> insert into normitems values ('231134-678', 'HP DeskJet 895Cse');
+
+1 row created.
+
+SQL> insert into normitems values ('342245-225', 'HP Toner');
+
+1 row created.
+
+SQL> insert into normitems values ('254668-449', 'DT Scanner');
+
+1 row created.
+
+SQL> select * from normitems;
+
+ITEM_ID              ITEM_LABEL                                                 
+-------------------- --------------------                                       
+231134-678           HP DeskJet 895Cse                                          
+342245-225           HP Toner                                                   
+254668-449           DT Scanner                                                 
+
+SQL> insert into normrooms values ('NTC', '231134-678', 325);
+
+1 row created.
+
+SQL> insert into normrooms values ('NTC', '342245-225', 325);
+
+1 row created.
+
+SQL> insert into normrooms values ('CSF', '254668-449', 123);
+
+1 row created.
+
+SQL> SELECT * from normrooms;
+
+BLDG_CODE  ITEM_ID                ROOM_NUM                                      
+---------- -------------------- ----------                                      
+NTC        231134-678                  325                                      
+NTC        342245-225                  325                                      
+CSF        254668-449                  123                                      
+
+SQL> select * from normitems;
+
+ITEM_ID              ITEM_LABEL                                                 
+-------------------- --------------------                                       
+231134-678           HP DeskJet 895Cse                                          
+342245-225           HP Toner                                                   
+254668-449           DT Scanner                                                 
+
+SQL> select * from normbuilding;
+
+BLDG_CODE  BLDG_NAME       BLDG_MANAGER                                         
+---------- --------------- ------------------------------                       
+NTC        Nottoclear      I.B.Rightonit                                        
+CSF        Canseefar       May B. Next                                          
+
+SQL> commit;
+
+Commit complete.
+
+SQL> exit;
